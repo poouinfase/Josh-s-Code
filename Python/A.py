@@ -6,12 +6,11 @@ from time import perf_counter as p
 def Multip(a,b):
     return a*b;
 
-N=2**22
+N= 2**22
 A = np.ones(N,dtype=float)
 B = np.ones(N,dtype=float)
 st = p() 
-C=Multip(A,B)
+C= Multip(A,B)
 en=p()
 print(en-st);
 print(C[:6:],C[-6::],sep='\n')
-
