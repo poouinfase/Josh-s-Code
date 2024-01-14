@@ -1,8 +1,10 @@
 function {
   param ($M);
-  cc ho.c;
+  cc ho.c -o Numgen.exe;
+  cc StringtoBin.c -o Parser.exe;
   if (!$M) {
-    $M = "TEST";
+    $M = "ABCD";
   }
-  $M|.\a.exe| python .\Parseho.py;
+  $tmp_Setup=$M|.\Numgen.exe;
+  .\Parser.exe $tmp_Setup
 }
