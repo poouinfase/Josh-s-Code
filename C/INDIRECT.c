@@ -1,10 +1,9 @@
 #include <stdio.h>
-int main(){
-  char *s;
-  if (!scanf("%[^\n]s",&s)){
-    puts("ERROR");
-    return 1;
-  }
-  puts(s);
-  return 0;
+
+int main() {
+  char strIn[50];
+  scanf_s("%s", strIn);
+  printf("Stop\n");
+  printf("%s\n", strIn);
+  return 123;
 }
