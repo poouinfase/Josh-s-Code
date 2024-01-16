@@ -2,19 +2,19 @@
 class primgener:
     def __init__(self):
         self.prime=1
-    
+
     def isprim(n):
         for i in range(2,round(n**0.5)+1):
             if n%i==0:
                 return False
         return True
-    
+
     def nexprim(self):
         self.prime+=1
         while(not primgener.isprim(self.prime)):
             self.prime+=1
         return self.prime
-   
+
     def retrprimemap(self,m,n):
         primhash=[]
         for i in range(m):
@@ -98,4 +98,3 @@ for i in range(64):
     game.perframe(n, m, gamefield)
     if input()=="q":
         break """
-
