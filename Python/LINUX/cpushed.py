@@ -20,13 +20,11 @@ def daemon(naem):
     f = open('Proctabl.txt', 'r')
     tim = 0
     procs = f.readlines()
+    f.close()
     procnum = 1
     print(procs)
-    while specmem[tim] != -1:
-        procat = procs[specmem[procnum]]
-        if int(procat[0]) < specmem[tim]:
-            specmem[procnum] += 1
-            print(procnum)
+    while specmem[tim] != -1 and specmem[procnum] < len(procs):
+        procats = procs[procnum]
     poiner.close()
     specmem.shm.close()
     quit()
@@ -45,11 +43,16 @@ def main():
     sleep(1)
     poiners.unlink()
     tim = 0
-    specmem[tim] = 1
-    sleep(1)
+    for _ in range(50):
+        specmem[tim] += 1
+        print(specmem[tim])
+        sleep(0.01)
+
+    specmem[tim] = -1
     specmem.shm.close()
     specmem.shm.unlink()
 
 
 if __name__ == "__main__":
     main()
+
