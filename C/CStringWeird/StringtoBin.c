@@ -46,7 +46,8 @@ char *numToBin(int s) {
   }
   // putc('\n', stdout);
   revthisstring(out, poin);
-  out = (char *)realloc(out, poin * sizeof(char));
+  out = (char *)realloc(out, poin * sizeof(char) + 1);
+  out[poin] = '\0';
   // putc('\n', stdout);
   return out;
 }
