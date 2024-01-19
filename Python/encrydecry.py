@@ -60,10 +60,12 @@ def brk(strin, siz):
 def main():
     lis = brk(input(), 4)
     Worker = Encoder(8)
-    print(ren := [Worker.encrypt(Worker.encode(i)) for i in lis])
+    ren = [Worker.encrypt(Worker.encode(i)) for i in lis]
+    print(*ren, sep='\n')
     print("".join([Worker.decode(Worker.decrypt(i)) for i in ren]))
     quit()
 
 
 if __name__ == "__main__":
     main()
+
