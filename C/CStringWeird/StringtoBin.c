@@ -4,12 +4,11 @@
 
 #define zero ((int)'0')
 #define swap(a, b)                                                             \
-  {                                                                            \
+  do {                                                                         \
     (a) ^= (b);                                                                \
     (b) ^= (a);                                                                \
     (a) ^= (b);                                                                \
-  }                                                                            \
-  while (0)
+  } while (0)
 
 char *numToBin(int s);
 void revthisstring(char *in, int len);
@@ -37,24 +36,20 @@ char *numToBin(int s) {
   int poin = 0;
   while (s) {
     out[poin] = ((s) & 1) ? '1' : '0';
-    // printf_s("%c", ((s) & 1) ? '1' : '0');
     s >>= 1;
     poin++;
   }
   for (; poin % 8 != 0; poin++) {
     out[poin] = '0';
   }
-  // putc('\n', stdout);
   revthisstring(out, poin);
   out = (char *)realloc(out, poin * sizeof(char) + 1);
   out[poin] = '\0';
-  // putc('\n', stdout);
   return out;
 }
 void revthisstring(char *strIn, int len) {
-  for (int i = 0; i < len / 2; i++) {
+  for (int i = 0; i < len / 2; i++)
     swap(strIn[i], strIn[len - i - 1]);
-  }
 }
 int main(int argc, char **argv) {
   if (argc != 4) {
