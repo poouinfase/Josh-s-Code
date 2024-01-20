@@ -5,7 +5,7 @@ if ((Test-Path -path $Srch ) -eq $False) { gcc BinVerLin.c -O2 -o Srch.exe; } #C
 echo ''>Timings.txt
 foreach ($algonum in '1','2') {
   # echo $algonum
-  $lim = ([uint64] 1 -shl 32)-1
+  $lim = ([uint64] 1 -shl 64)-1
   $Siz=[uint64] 1
   for ($Siz ; $Siz -lt ($lim); $Siz =$Siz -shl 1) {
     echo $Siz;
