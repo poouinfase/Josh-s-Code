@@ -1,14 +1,15 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #define zero '0'
 
-int stringtoint(char *s) {
-  int out = 0;
-  int len = strlen(s);
-  for (int i = 0; i < len; i++)
-    out = out * 10 + (int)(*(s + i) - zero);
+uint64_t stringtoint(char *s) {
+  uint64_t out = 0;
+  uint64_t len = strlen(s);
+  for (uint64_t i = 0; i < len; i++)
+    out = out * 10 + (uint64_t)(*(s + i) - zero);
   return out;
 }
 
@@ -35,7 +36,7 @@ int search2(int *arr, int n, int x) {
 
 int main(int argc, char **argv) {
   // printf("%d\n", argc);
-  long int siz;
+  uint64_t siz;
   siz = 1000000;
   if (argc == 2) {
     siz = stringtoint(*(argv + 1));
@@ -47,7 +48,7 @@ int main(int argc, char **argv) {
   scanf_s("%d", &choice);
   int *numArr = (int *)calloc(siz, sizeof(int));
   *numArr = rand();
-  for (int i = 0; i < siz; i++)
+  for (uint64_t i = 0; i < siz; i++)
     numArr[i] = i + numArr[0];
   int findMe = numArr[rand() % siz];
   // LARGE_INTEGER freq;
@@ -58,7 +59,7 @@ int main(int argc, char **argv) {
   // QueryPerformanceCounter(&before);
   switch (choice) {
   case 1:
-    printf("%d\n", search1(numArr, 0, siz - 1, findMe));
+    printf("1\n%d\n", search1(numArr, 0, siz - 1, findMe));
     break;
 
     // QueryPerformanceCounter(&after);
@@ -66,7 +67,7 @@ int main(int argc, char **argv) {
     // freq.QuadPart; printf("%Lf\n", interval);
     // QueryPerformanceCounter(&before);
   case 2:
-    printf("%d\n", search2(numArr, siz, findMe));
+    printf("2\n%d\n", search2(numArr, siz, findMe));
     break;
 
     // QueryPerformanceCounter(&after);
