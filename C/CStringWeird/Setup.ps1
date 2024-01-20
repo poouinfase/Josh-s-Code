@@ -1,7 +1,7 @@
 function {
   param ($M);
-  cc ho.c -o Numgen.exe;
-  cc StringtoBin.c -o Parser.exe;
+  if((Test-Path -literalpath ".\Numgen.exe") -eq $False){echo 'Rebuild Numgen';cc ho.c -o Numgen.exe;}
+  if((Test-Path -literalpath ".\Parser.exe") -eq $False){echo 'Rebuild Parser';cc StringtoBin.c -o Parser.exe;}
   if (!$M) {
     $M = "ABCD";
   }
