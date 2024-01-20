@@ -5,13 +5,14 @@ if ((Test-Path -path $fil ) -eq $False) { gcc filter.c -O2 -o fil.exe; } #Compli
 echo ''>Timings.txt
 foreach ($algonum in '1','2') {
   # echo $algonum
-  $lim = [uint64] 1 -shl 33-1
+  $lim = [uint64] 1 -shl 43-1
   $Siz=[uint64] 1
   for ($Siz ; $Siz -lt ($lim); $Siz =$Siz -shl 1) {
-    # echo $Siz;
+    echo $Siz;
     $Tim=time{ $algonum|.\Srch.exe $Siz }
     $D=.\fil.exe $Tim
     # echo $algonum
     echo "$algonum $Siz $D" >>Timings.txt
      }
 }
+python Stats.py
