@@ -1,2 +1,2 @@
 #include <stdio.h>
-int main(int argc, char **argv) { printf("%s\n", *(argv + 1) + 7); }
+int main(int argc, char **argv) { printf("%s\n", *(argv + 1) + 6); }
