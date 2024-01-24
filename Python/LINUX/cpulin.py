@@ -5,6 +5,7 @@ class process:
         self.prior = int(prior)
         self.admitted = int(wait)
         self.arival = int(ariv)
+        self.cacheburs = int(burst)
 
     def __getitem__(self, ind):
         match(ind):
@@ -25,7 +26,7 @@ class process:
             case _: raise BaseException("ONLY FIVE THINGS")
 
     def __str__(self):
-        return f"Pid: {self.pid}\nBurst: {self.burst}" +\
+        return f"Pid: {self.pid}\nBurst: {self.cacheburs}" +\
             f"\nprior: {self.prior}\nwait: {self.admitted}\n"
 
 
@@ -99,8 +100,8 @@ def PRIORITY_NONPREMPTIVE():
         if len(ready) == 0:
             time += 1
             continue
-        best = ready[0]
         if best is None:
+            best = ready[0]
             for i in ready:
                 if i[2] < best[2]:
                     best = i
@@ -168,22 +169,23 @@ def SJF_NONPREMPTIVE():
         if len(ready) == 0:
             time += 1
             continue
-        best = ready[0]
         if best is None:
+            best = ready[0]
             for i in ready:
                 if i[1] < best[1]:
                     best = i
                 if i[1] == best[1]:
                     best = best if (best[4] < i[4]) else i
+            # print("BEST: at ", time, "\n",  best)
         for i in ready:
             if best is not i:
                 i[3] += 1
         best[1] += -1
+        time += 1
         if best[1] == 0:
             ready.remove(best)
             procomp += 1
             best = None
-        time += 1
     print(*proclis, sep='\n')
 
 
@@ -231,3 +233,4 @@ match(int(input())):
     case 4: SJF_PREMPTIVE()
     case 5: SJF_NONPREMPTIVE()
     case 6: ROUNDROBIN()
+
