@@ -1,3 +1,4 @@
+CPUSCHEDULING ALGORITHM
 
 FCFS
 AIM: To schedule processes in order of arrival.
