@@ -6,9 +6,9 @@ int main(){
   pid_t pid = fork();
   
   if(pid){
-    fprintf(stderr,"Gonna go get some milk\n");
+    fprintf(stderr,"Gonna go get some milk: %d\n",getpid());
     exit(0);
   }
   sleep(5);
-    fprintf(stderr, "Dad?\n");
+    fprintf(stderr, "Dad? %d\n",getpid());
 }

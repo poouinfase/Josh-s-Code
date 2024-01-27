@@ -10,6 +10,7 @@ int main(void)
     i+=-1;
     sleep(1);
   }
+  printf("PARENT: %d\n",getpid());
   exit(EXIT_SUCCESS);
 }
 

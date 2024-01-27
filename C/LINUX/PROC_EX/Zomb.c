@@ -7,7 +7,9 @@ int main(){
     if (!pid){
     printf("I am parent: %d\n",getpid());
     sleep(10);
-    printf("Exit");
+    printf("PARENT Exit");
   }
+    printf("I am child: %d\n",getpid());
+    printf("CHILD Exit");
   exit(0);
 }
