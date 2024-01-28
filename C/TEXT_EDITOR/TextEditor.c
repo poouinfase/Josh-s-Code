@@ -20,6 +20,12 @@ void keymove(char *i) {
     break;
   }
 }
+
+void backspace() {
+  putc(8, stdout);
+  putc(' ', stdout);
+}
+
 int main(int argc, char *argv[]) {
   int chrc = 0;
   for (char i = _getch(); i != '\0'; i = _getch()) {
@@ -27,7 +33,8 @@ int main(int argc, char *argv[]) {
       i = '\n';
     if (i == -32)
       keymove(&i);
-
+    if (i == 8)
+      backspace();
     putc(i, stdout);
     chrc++;
   }
