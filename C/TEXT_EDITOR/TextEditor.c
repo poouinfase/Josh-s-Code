@@ -1,43 +1,117 @@
 #include <conio.h>
 #include <stdio.h>
 #include <stdlib.h>
-void keymove(char *i) {
-  *i = _getch();
-  putc(0x1B, stdout);
-  putc('[', stdout);
-  switch (*i) {
+#include <sys/stat.h>
+
+#define MAX_BUFFER 1000
+
+#define COMMAND 0
+#define NORM 1
+#define SELECT 2
+
+struct state {
+  int poinAtEnd;
+  char buff[MAX_BUFFER];
+  unsigned char currChar;
+  short int Mode;
+  int Quit_Flag;
+};
+void normKeymove(struct state *opBuff);
+
+void commMode(struct state *opBuff) {
+  switch (opBuff->currChar) {
+
+  case ':':
+    char s = _getch();
+    if (s == 'q')
+      opBuff->Quit_Flag = 0;
+    break;
+
+  case 'i':
+    opBuff->Mode = NORM;
+    break;
+
+  case 224:
+    normKeymove(opBuff);
+  default:
+    break;
+  }
+}
+
+void normKeymove(struct state *opBuff) {
+  char i = _getch();
+  switch (i) {
   case 'H':
-    *i = 'A';
+    i = 'A';
     break;
   case 'K':
-    *i = 'D';
+    i = 'D';
+    opBuff->poinAtEnd--;
     break;
   case 'P':
-    *i = 'B';
+    i = 'B';
     break;
   case 'M':
-    *i = 'C';
+    i = 'C';
+    opBuff->poinAtEnd++;
     break;
   }
+  putc(0x1B, stdout);
+  putc('[', stdout);
+  putc(i, stdout);
 }
 
-void backspace() {
+void normBackspace(struct state *opBuff) {
+  if (opBuff->poinAtEnd == 0)
+    return;
+  opBuff->poinAtEnd = opBuff->poinAtEnd - 1;
+  opBuff->buff[opBuff->poinAtEnd] = (unsigned char)' ';
   putc(8, stdout);
   putc(' ', stdout);
+  putc(8, stdout);
 }
 
-int main(int argc, char *argv[]) {
-  int chrc = 0;
-  for (char i = _getch(); i != '\0'; i = _getch()) {
-    if (i == 13)
-      i = '\n';
-    if (i == -32)
-      keymove(&i);
-    if (i == 8)
-      backspace();
-    putc(i, stdout);
-    chrc++;
+void normalKey(struct state *opBuff) {
+  if (opBuff->currChar == 13)
+    opBuff->currChar = '\n';
+  opBuff->buff[opBuff->poinAtEnd] = opBuff->currChar;
+  opBuff->poinAtEnd += 1;
+  putc(opBuff->currChar, stdout);
+}
+
+void normMode(struct state *opBuff) {
+  switch (opBuff->currChar) {
+  case 3:
+    opBuff->Mode = COMMAND;
+    break;
+  case 8:
+    normBackspace(opBuff);
+    break;
+  case 224:
+    normKeymove(opBuff);
+    break;
+  default:
+    normalKey(opBuff);
   }
-  printf("\n%d\n", chrc);
+}
+int main(int argc, char *argv[]) {
+  struct state opbuff = {0};
+  opbuff.Quit_Flag = 1;
+  opbuff.Mode = NORM;
+
+  while (opbuff.Quit_Flag && (opbuff.currChar = _getch())) {
+    switch (opbuff.Mode) {
+    case NORM:
+      normMode(&opbuff);
+      break;
+    case COMMAND:
+      commMode(&opbuff);
+      break;
+    case SELECT:
+      break;
+    }
+  }
+
+  printf("\n%d\n%s", opbuff.poinAtEnd, opbuff.buff);
   return EXIT_SUCCESS;
 }
