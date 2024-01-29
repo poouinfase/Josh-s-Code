@@ -47,7 +47,7 @@ def FCFS():
                 continue
             proclis[i][3] = time
             time += proclis[i][1]
-    print(*proclis, sep='\n')
+    return proclis
 
 
 def PRIORITY_PREMPTIVE():
@@ -80,7 +80,7 @@ def PRIORITY_PREMPTIVE():
             ready.remove(best)
             procomp += 1
         time += 1
-    print(*proclis, sep='\n')
+    return proclis
 
 
 def PRIORITY_NONPREMPTIVE():
@@ -116,7 +116,7 @@ def PRIORITY_NONPREMPTIVE():
             best = None
             procomp += 1
         time += 1
-    print(*proclis, sep='\n')
+    return proclis
 
 
 def SJF_PREMPTIVE():
@@ -149,7 +149,7 @@ def SJF_PREMPTIVE():
             ready.remove(best)
             procomp += 1
         time += 1
-    print(*proclis, sep='\n')
+    return proclis
 
 
 def SJF_NONPREMPTIVE():
@@ -186,7 +186,7 @@ def SJF_NONPREMPTIVE():
             ready.remove(best)
             procomp += 1
             best = None
-    print(*proclis, sep='\n')
+    return proclis
 
 
 def ROUNDROBIN(TimQ=20):
@@ -219,18 +219,25 @@ def ROUNDROBIN(TimQ=20):
             time += TimQ
         else:
             time += 1
-    print(*proclis, sep='\n')
+    return proclis
 
 
 print("1 FCFS\n2 PRIORITIRY_PREMPTIVE\n3 PRIORITY_NONPREMEPTIVE",
       "\n4 SJF_PREMPTIVE\n5 SJF_NONPREMPTIVE\n6 ROUNDROBIN", sep='')
 
-
+proclis = None
 match(int(input())):
-    case 1: FCFS()
-    case 2: PRIORITY_PREMPTIVE()
-    case 3: PRIORITY_NONPREMPTIVE()
-    case 4: SJF_PREMPTIVE()
-    case 5: SJF_NONPREMPTIVE()
-    case 6: ROUNDROBIN()
-
+    case 1: proclis = FCFS()
+    case 2: proclis = PRIORITY_PREMPTIVE()
+    case 3: proclis = PRIORITY_NONPREMPTIVE()
+    case 4: proclis = SJF_PREMPTIVE()
+    case 5: proclis = SJF_NONPREMPTIVE()
+    case 6: proclis = ROUNDROBIN()
+waitsum = 0
+TatTime = 0
+for i in proclis:
+    waitsum += i[3]
+    TatTime += i[3] + i.cacheburs
+print(*proclis,  sep='\n')
+print("\n\nAVG WAIT:", waitsum/len(proclis),
+      "\nAVG Turn around Time", TatTime/len(proclis))

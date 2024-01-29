@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=pueue
+comment1.params=len
+comment1.target=pueue(int)
+comment2.params=
+comment2.target=int\ deque()
+comment3.params=in
+comment3.target=void\ queue(int)
+comment4.params=
+comment4.target=void\ display()
+numComments=5
