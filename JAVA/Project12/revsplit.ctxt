@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=revsplit
+comment1.params=str
+comment1.target=java.lang.String[]\ separ(java.lang.String)
+comment2.params=str
+comment2.target=java.lang.String\ rev(java.lang.String)
+comment3.params=in
+comment3.target=void\ disp(java.lang.String[])
+comment4.params=
+comment4.target=void\ main()
+numComments=5
