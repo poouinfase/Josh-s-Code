@@ -2,5 +2,6 @@
 *.txt
 *.txt~
 a.exe
+a.out
 *.scr
 !Timings.txt
