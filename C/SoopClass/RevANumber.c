@@ -10,6 +10,6 @@ int reverse(int n) {
 }
 int main(int argc, char *argv[]) {
   int n;
-  scanf_s("%s", &n);
+  scanf("%d", &n);
   printf("%d %d", n, reverse(n));
 }
