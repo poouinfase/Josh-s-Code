@@ -5,21 +5,59 @@ int src(int **Arr, int *Avail, int **Alloc, int Num_Proc, int Num_Res,
         int con) {
   int isSaf = 0;
   for (int i = 0; i < Num_Proc; i++) {
-    if (Arr[(i + con) % Num_Proc] == NULL)
+    int ind = (i + con) % Num_Proc;
+    if (Arr[ind] == NULL)
       continue;
     isSaf = 1;
     for (int j = 0; j < Num_Res; j++) {
-      isSaf = isSaf && (Arr[(i + con) % Num_Proc][j] <= Avail[j]);
+      isSaf = isSaf && (Arr[ind][j] <= Avail[j]);
     }
     if (isSaf) {
       for (int j = 0; j < Num_Res; j++)
-        Avail[j] += Alloc[(i + con) % Num_Proc][j];
-      free(Arr[(i + con) % Num_Proc]);
-      Arr[(i + con) % Num_Proc] = NULL;
-      return i;
+        Avail[j] += Alloc[ind][j];
+      free(Arr[ind]);
+      Arr[ind] = NULL;
+      return ind;
     }
   }
   return -1;
+}
+
+void prinSafSeq(int **ProcNeed, int **ProcAllo, int *ProcAvail, int Num_Proc,
+                int Num_Res) {
+  puts("");
+  int con = -1;
+  int Seq[Num_Proc];
+  for (int i = 0; i < Num_Proc; i++) {
+    con = src(ProcNeed, ProcAvail, ProcAllo, Num_Proc, Num_Res, con + 1);
+    if (con == -1) {
+      printf("ERROR: NO SAFE SEQUENCE");
+      return;
+    }
+    Seq[i] = con;
+  }
+  for (int i = 0; i < Num_Proc; i++) {
+    printf("P%d", Seq[i]);
+    if (i != Num_Proc - 1)
+      printf("->");
+  }
+}
+void printTable(int **AR1, int **AR2, int **AR3, int Rows, int Col) {
+  puts("ALLOC\tMAX\tNEED");
+  for (int i = 0; i < Rows; i++) {
+    for (int j = 0; j < Col; j++)
+      printf("%d ", AR1[i][j]);
+
+    putc('\t', stdout);
+    for (int j = 0; j < Col; j++)
+      printf("%d ", AR2[i][j]);
+
+    putc('\t', stdout);
+    for (int j = 0; j < Col; j++)
+      printf("%d ", AR3[i][j]);
+
+    puts("");
+  }
 }
 
 void xFree(int **Arr, int len) {
@@ -58,27 +96,11 @@ int main() {
   }
 
   // OUTPUT TABLE
-  puts("ALLOC\tMAX\tNEED");
-  for (int i = 0; i < Num_Proc; i++) {
-    for (int j = 0; j < Num_Res; j++)
-      printf("%d ", ProcAllo[i][j]);
+  printTable(ProcAllo, ProcMaxi, ProcNeed, Num_Proc, Num_Res);
+  // OUTPUTSEQ
+  prinSafSeq(ProcNeed, ProcAllo, ProcAvail, Num_Proc, Num_Res);
 
-    putc('\t', stdout);
-    for (int j = 0; j < Num_Res; j++)
-      printf("%d ", ProcMaxi[i][j]);
-
-    putc('\t', stdout);
-    for (int j = 0; j < Num_Res; j++)
-      printf("%d ", ProcNeed[i][j]);
-
-    puts("");
-  }
-  int *n = malloc(8);
-  int con = 0;
-  for (int i = 0; i < 5; i++) {
-    con = src(ProcNeed, ProcAvail, ProcAllo, Num_Proc, Num_Res, 0);
-    printf("%d\n", con);
-  }
+  puts("");
   xFree(ProcAllo, Num_Proc);
   xFree(ProcNeed, Num_Proc);
   xFree(ProcMaxi, Num_Proc);
