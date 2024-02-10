@@ -25,5 +25,5 @@ int main(int argc, char *argv[]) {
       moveleft();
     else
       puts("");
-  } while (i);
+  } while (i && i != 3);
 }
