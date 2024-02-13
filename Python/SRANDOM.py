@@ -15,7 +15,7 @@ def galois(lfsr: int):
 
 def timeTester(f):
     ti = time()
-    for i in range(100000):
+    for i in range(1000000):
         f(i)
     return time()-ti
 
@@ -40,7 +40,7 @@ def periodFinder():
 
 
 def analyse(f):
-    rmax = 6500000
+    rmax = 65000000
     st = 1
     tmp = f(st)
     p = 0
@@ -56,7 +56,9 @@ def analyse(f):
             min = tmp
         tmp = f(tmp)
     average = sm/p
-    return p, sm, average, max, min
+    return f"PERIOD: {p}, SUM: {sm}, AVERAGE: {average}, MAX: {max}, MIN: {min}"
 
 
 print(analyse(srand), analyse(galois), sep="\n")
+
+print(f"TIME: SRAND:{timeTester(srand)} GALOIS:{timeTester(galois)}")
