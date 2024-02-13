@@ -61,4 +61,4 @@ def analyse(f):
 
 print(analyse(srand), analyse(galois), sep="\n")
 
-print(f"TIME: SRAND:{timeTester(srand)} GALOIS:{timeTester(galois)}")
+print(f"TIME: SRAND:{averageTime(srand)} GALOIS:{averageTime(galois)}")
