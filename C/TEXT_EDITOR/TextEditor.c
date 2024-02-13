@@ -1,9 +1,28 @@
 #include <conio.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #define MAX_BUFFER 1000
+
+#define CSI(A)                                                                 \
+  do {                                                                         \
+    printf("\e[" A);                                                           \
+  } while (0)
+#define CSICHAR(A)                                                             \
+  do {                                                                         \
+    printf("\e[%c", A);                                                        \
+  } while (0)
+
+#define CSIM(A, B)                                                             \
+  do {                                                                         \
+    putc(0x1B, stdout);                                                        \
+    putc('[', stdout);                                                         \
+    putc(A, stdout);                                                           \
+    putc(B, stdout);                                                           \
+  } while (0)
 
 #define COMMAND 0
 #define NORM 1
@@ -13,7 +32,7 @@ struct state {
   int poinAtEnd;
   char buff[MAX_BUFFER];
   unsigned char currChar;
-  short int Mode;
+  uint8_t Mode;
   int Quit_Flag;
 };
 void normKeymove(struct state *opBuff);
@@ -22,9 +41,14 @@ void commMode(struct state *opBuff) {
   switch (opBuff->currChar) {
 
   case ':':
-    char s = _getch();
-    if (s == 'q')
+    CSI("s");
+    CSI("40;1H");
+    char s[51];
+    int n = read(0, s, 50);
+    s[n] = 0;
+    if (*s == 'q')
       opBuff->Quit_Flag = 0;
+    CSI("u");
     break;
 
   case 'i':
@@ -56,9 +80,7 @@ void normKeymove(struct state *opBuff) {
     opBuff->poinAtEnd++;
     break;
   }
-  putc(0x1B, stdout);
-  putc('[', stdout);
-  putc(i, stdout);
+  CSICHAR(i);
 }
 
 void normBackspace(struct state *opBuff) {
