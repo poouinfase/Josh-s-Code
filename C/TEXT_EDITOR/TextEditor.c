@@ -18,10 +18,10 @@
 
 struct state {
   int poinAtEnd;
-  char buff[MAX_BUFFER];
   unsigned char currChar;
   uint8_t Mode;
-  int Quit_Flag;
+  uint8_t Quit_Flag;
+  char buff[MAX_BUFFER];
 };
 void normKeymove(struct state *opBuff);
 
