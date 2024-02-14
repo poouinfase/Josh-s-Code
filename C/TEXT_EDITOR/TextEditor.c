@@ -11,18 +11,6 @@
   do {                                                                         \
     printf("\e[" A);                                                           \
   } while (0)
-#define CSICHAR(A)                                                             \
-  do {                                                                         \
-    printf("\e[%c", A);                                                        \
-  } while (0)
-
-#define CSIM(A, B)                                                             \
-  do {                                                                         \
-    putc(0x1B, stdout);                                                        \
-    putc('[', stdout);                                                         \
-    putc(A, stdout);                                                           \
-    putc(B, stdout);                                                           \
-  } while (0)
 
 #define COMMAND 0
 #define NORM 1
@@ -80,7 +68,8 @@ void normKeymove(struct state *opBuff) {
     opBuff->poinAtEnd++;
     break;
   }
-  CSICHAR(i);
+#define TMP "%c", i
+  CSI(TMP);
 }
 
 void normBackspace(struct state *opBuff) {
