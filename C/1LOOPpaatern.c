@@ -1,16 +1,17 @@
 #include <stdio.h>
 
 int main() {
-  int n = 5;
-  char lin = 0;
-  int cp = 0;
-  int ca = 1;
+  int n = 0;
+  if (0 == scanf("%d", &n))
+    return -1;
+  int cp = 1;
+  int ca = 2;
   for (int i = 0; i < n * (n + 1) / 2; i++) {
-    if (i == cp) {
-      printf("%c", lin);
-      lin = '\n';
-      cp += ca++;
+    if (!cp) {
+      printf("\n");
+      cp = ca++;
     }
+    cp--;
     printf("*");
   }
 }
