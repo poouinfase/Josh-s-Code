@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 
 int *fibLis(int n) {
   int *Fib = (int *)malloc(sizeof(int) * (1 + n));
-  for (int i = 0; i < n; i++)
+  for (int i = 0; i <= n; i++)
     Fib[i] = 0;
   Fib[1] = 1;
   fibof(Fib, n);
