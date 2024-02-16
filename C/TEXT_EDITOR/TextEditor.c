@@ -18,6 +18,7 @@
 
 struct state {
   int poinAtEnd;
+  int CharLen;
   unsigned char currChar;
   uint8_t Mode;
   uint8_t Quit_Flag;
@@ -87,6 +88,7 @@ void normalKey(struct state *opBuff) {
     opBuff->currChar = '\n';
   opBuff->buff[opBuff->poinAtEnd] = opBuff->currChar;
   opBuff->poinAtEnd += 1;
+  opBuff->CharLen += 1;
   putc(opBuff->currChar, stdout);
 }
 
@@ -125,6 +127,6 @@ int main(int argc, char *argv[]) {
   }
 
   printf("\e[H\e[2J\e[3J");
-  printf("\n%d\n%s\n", opbuff.poinAtEnd, opbuff.buff);
+  printf("\n%d\n%s\n", opbuff.CharLen, opbuff.buff);
   return EXIT_SUCCESS;
 }
