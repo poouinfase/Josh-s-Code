@@ -106,7 +106,7 @@ void normMode(struct state *opBuff) {
   }
 }
 int main(int argc, char *argv[]) {
-  system("cls");
+  printf("\e[H\e[2J\e[3J");
   struct state opbuff = {0};
   opbuff.Quit_Flag = 1;
   opbuff.Mode = NORM;
@@ -123,7 +123,8 @@ int main(int argc, char *argv[]) {
       break;
     }
   }
-  system("cls");
+
+  printf("\e[H\e[2J\e[3J");
   printf("\n%d\n%s\n", opbuff.poinAtEnd, opbuff.buff);
   return EXIT_SUCCESS;
 }
