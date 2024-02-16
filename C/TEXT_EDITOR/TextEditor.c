@@ -127,6 +127,9 @@ int main(int argc, char *argv[]) {
   }
 
   printf("\e[H\e[2J\e[3J");
-  printf("\n%d\n%s\n", opbuff.CharLen, opbuff.buff);
+
+  FILE *fptr = fopen("Tmp.txt", "w");
+  fprintf(fptr, opbuff.buff);
+  fclose(fptr);
   return EXIT_SUCCESS;
 }
