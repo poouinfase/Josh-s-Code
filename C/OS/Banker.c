@@ -1,22 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int src(int **Arr, int *Avail, int **Alloc, int Num_Proc, int Num_Res,
-        int con) {
+int searchNexSaf(int **Need, int *Avail, int **Alloc, int Num_Proc, int Num_Res,
+                 int con) {
   int isSaf = 0;
   for (int i = 0; i < Num_Proc; i++) {
     int ind = (i + con) % Num_Proc;
-    if (Arr[ind] == NULL)
+    if (Need[ind] == NULL)
       continue;
     isSaf = 1;
     for (int j = 0; j < Num_Res; j++) {
-      isSaf = isSaf && (Arr[ind][j] <= Avail[j]);
+      isSaf = isSaf && (Need[ind][j] <= Avail[j]);
     }
     if (isSaf) {
       for (int j = 0; j < Num_Res; j++)
         Avail[j] += Alloc[ind][j];
-      free(Arr[ind]);
-      Arr[ind] = NULL;
+      free(Need[ind]);
+      Need[ind] = NULL;
       return ind;
     }
   }
@@ -29,7 +29,8 @@ void prinSafSeq(int **ProcNeed, int **ProcAllo, int *ProcAvail, int Num_Proc,
   int con = -1;
   int Seq[Num_Proc];
   for (int i = 0; i < Num_Proc; i++) {
-    con = src(ProcNeed, ProcAvail, ProcAllo, Num_Proc, Num_Res, con + 1);
+    con =
+        searchNexSaf(ProcNeed, ProcAvail, ProcAllo, Num_Proc, Num_Res, con + 1);
     if (con == -1) {
       printf("ERROR: NO SAFE SEQUENCE");
       return;
@@ -42,6 +43,7 @@ void prinSafSeq(int **ProcNeed, int **ProcAllo, int *ProcAvail, int Num_Proc,
       printf("->");
   }
 }
+
 void printTable(int **AR1, int **AR2, int **AR3, int Rows, int Col) {
   puts("ALLOC\tMAX\tNEED");
   for (int i = 0; i < Rows; i++) {
@@ -70,7 +72,6 @@ void xFree(int **Arr, int len) {
 int main() {
   int Num_Proc, Num_Res;
   scanf("%d %d", &Num_Proc, &Num_Res);
-  printf("%d %d\n", Num_Proc, Num_Res);
   int **ProcAllo = (int **)calloc(Num_Proc, sizeof(int *));
   int **ProcMaxi = (int **)calloc(Num_Proc, sizeof(int *));
   int **ProcNeed = (int **)calloc(Num_Proc, sizeof(int *));
@@ -91,9 +92,8 @@ int main() {
       ProcNeed[i][j] = ProcMaxi[i][j] - ProcAllo[i][j];
   }
   // INPUT AVAIL
-  for (int j = 0; j < Num_Res; j++) {
+  for (int j = 0; j < Num_Res; j++)
     scanf("%d", &ProcAvail[j]);
-  }
 
   // OUTPUT TABLE
   printTable(ProcAllo, ProcMaxi, ProcNeed, Num_Proc, Num_Res);
