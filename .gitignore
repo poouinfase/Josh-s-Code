@@ -4,4 +4,5 @@
 a.exe
 a.out
 *.scr
+*.ign.*
 !Timings.txt

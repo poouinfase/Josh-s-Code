@@ -106,7 +106,7 @@ int main() {
   if (prinSafSeq(ProcNeed, ProcAllo, ProcAvail, Num_Proc, Num_Res,
                  "SAFE SEQUENCE:")) {
     puts("ERROR NO SAFE SEQUENCE");
-    return 1;
+    goto ERR;
   }
 
   ProcNeed = (int **)calloc(Num_Proc, sizeof(int *));
@@ -129,7 +129,7 @@ int main() {
                                     Num_Res, "ADDITIONAL RESOURCE:")) {
     puts("ADDITIONAL RESOURCE CANNOT BE GRANTED");
   }
-
+ERR:
   xFree(ProcAllo, Num_Proc);
   xFree(ProcMaxi, Num_Proc);
   free(ProcNeed);
