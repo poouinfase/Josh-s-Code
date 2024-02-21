@@ -20,11 +20,12 @@ int searchNexSaf(int **Need, int *Avail, int **Alloc, int Num_Proc, int Num_Res,
       return ind;
     }
   }
+  puts("");
   return -1;
 }
 
-void prinSafSeq(int **ProcNeed, int **ProcAllo, int *ProcAvail, int Num_Proc,
-                int Num_Res) {
+int prinSafSeq(int **ProcNeed, int **ProcAllo, int *ProcAvail, int Num_Proc,
+               int Num_Res, char *prompt) {
   puts("");
   int con = -1;
   int Seq[Num_Proc];
@@ -32,16 +33,17 @@ void prinSafSeq(int **ProcNeed, int **ProcAllo, int *ProcAvail, int Num_Proc,
     con =
         searchNexSaf(ProcNeed, ProcAvail, ProcAllo, Num_Proc, Num_Res, con + 1);
     if (con == -1) {
-      printf("ERROR: NO SAFE SEQUENCE");
-      return;
+      return -1;
     }
     Seq[i] = con;
   }
+  puts(prompt);
   for (int i = 0; i < Num_Proc; i++) {
     printf("P%d", Seq[i]);
     if (i != Num_Proc - 1)
       printf("->");
   }
+  return 0;
 }
 
 void printTable(int **AR1, int **AR2, int **AR3, int Rows, int Col) {
@@ -71,11 +73,13 @@ void xFree(int **Arr, int len) {
 
 int main() {
   int Num_Proc, Num_Res;
+  int AddResInd = -1;
   scanf("%d %d", &Num_Proc, &Num_Res);
   int **ProcAllo = (int **)calloc(Num_Proc, sizeof(int *));
   int **ProcMaxi = (int **)calloc(Num_Proc, sizeof(int *));
   int **ProcNeed = (int **)calloc(Num_Proc, sizeof(int *));
   int *ProcAvail = (int *)calloc(Num_Res, sizeof(int));
+  int *ProcAvailCpy = (int *)calloc(Num_Res, sizeof(int));
 
   for (int i = 0; i < Num_Proc; i++) {
     ProcAllo[i] = (int *)calloc(Num_Res, sizeof(int));
@@ -92,18 +96,44 @@ int main() {
       ProcNeed[i][j] = ProcMaxi[i][j] - ProcAllo[i][j];
   }
   // INPUT AVAIL
-  for (int j = 0; j < Num_Res; j++)
+  for (int j = 0; j < Num_Res; j++) {
     scanf("%d", &ProcAvail[j]);
-
+    ProcAvailCpy[j] = ProcAvail[j];
+  }
   // OUTPUT TABLE
   printTable(ProcAllo, ProcMaxi, ProcNeed, Num_Proc, Num_Res);
   // OUTPUTSEQ
-  prinSafSeq(ProcNeed, ProcAllo, ProcAvail, Num_Proc, Num_Res);
+  if (prinSafSeq(ProcNeed, ProcAllo, ProcAvail, Num_Proc, Num_Res,
+                 "SAFE SEQUENCE:")) {
+    puts("ERROR NO SAFE SEQUENCE");
+    return 1;
+  }
 
-  puts("");
+  ProcNeed = (int **)calloc(Num_Proc, sizeof(int *));
+  for (int i = 0; i < Num_Proc; i++) {
+    ProcNeed[i] = (int *)calloc(Num_Res, sizeof(int));
+    for (int j = 0; j < Num_Res; j++) {
+      ProcNeed[i][j] = ProcMaxi[i][j] - ProcAllo[i][j];
+    }
+  }
+  // INPUT AddResInd
+  if (scanf("%d", &AddResInd) != EOF) {
+    int temp;
+    for (int j = 0; j < Num_Res; j++) {
+      scanf("%d", &temp);
+      ProcNeed[AddResInd][j] += temp;
+    }
+  }
+
+  if (AddResInd != -1 && prinSafSeq(ProcNeed, ProcAllo, ProcAvailCpy, Num_Proc,
+                                    Num_Res, "ADDITIONAL RESOURCE:")) {
+    puts("ADDITIONAL RESOURCE CANNOT BE GRANTED");
+  }
+
   xFree(ProcAllo, Num_Proc);
-  xFree(ProcNeed, Num_Proc);
   xFree(ProcMaxi, Num_Proc);
+  free(ProcNeed);
   free(ProcAvail);
+  free(ProcAvailCpy);
   return 0;
 }
