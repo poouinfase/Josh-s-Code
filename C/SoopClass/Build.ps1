@@ -1,1 +1,1 @@
-function {cc .\Sumthin.c;.\a.exe}
+function {cc .\Sumthin.ign.c;.\a.exe}
