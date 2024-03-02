@@ -18,7 +18,7 @@ void *philosopher(void *arg) {
   int id = *(int *)arg;
   int left_fork = id;
   int right_fork = (id + 1) % NUM_FORKS;
-  int n = 10;
+  int n = 3;
 
   while (n) {
     // Think
@@ -38,13 +38,11 @@ void *philosopher(void *arg) {
 
     // Eat
     printf("Philosopher %d is eating!\n", id + 1);
-    sleep(1);
 
     // Put down forks
     pthread_mutex_unlock(&forks[left_fork]);
     pthread_mutex_unlock(&forks[right_fork]);
     state[id] = THINKING;
-    sleep(3);
   }
   return NULL;
 }
