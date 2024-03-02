@@ -43,6 +43,7 @@ void *philosopher(void *arg) {
     pthread_mutex_unlock(&forks[left_fork]);
     pthread_mutex_unlock(&forks[right_fork]);
     state[id] = THINKING;
+    sleep(1);
   }
   return NULL;
 }
