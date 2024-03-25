@@ -31,7 +31,7 @@ void lru(struct RequestList, struct PageList, struct FrameList);
 int coun(int, int, struct RequestList);
 int srch(int, struct FrameList);
 int max(struct RequestList);
-int dist(int srch, int cur, struct RequestList Req);
+int dist(int, int, struct RequestList);
 
 void prinframs(struct FrameList);
 void shifright(struct FrameList);
@@ -60,7 +60,7 @@ int main() {
   }
   putchar('\n');
 
-  Pages.len = max(Requests);
+  Pages.len = 1 + max(Requests);
   printf("Number of Pages: %d\n", Pages.len);
 
   assert(Pages.len > 0);
@@ -72,20 +72,30 @@ int main() {
   }
 
   Frames.len = 0;
-  puts("Number of Frames: ");
+  printf("Number of Frames: ");
   scanf("%d", &Frames.len);
-
-  Frames.list = (page **)malloc(sizeof(page *) * Frames.len);
   putchar('\n');
 
+  Frames.list = (page **)malloc(sizeof(page *) * Frames.len);
   nullify(Frames);
-  fifo(Requests, Pages, Frames);
+  puts("1-FIFO\n2-LRU\n3-OPTIMAL");
+  int n = 0;
+  scanf("%d", &n);
 
-  nullify(Frames);
-  lru(Requests, Pages, Frames);
+  switch (n) {
 
-  nullify(Frames);
-  optimal(Requests, Pages, Frames);
+  case 1:
+    fifo(Requests, Pages, Frames);
+    break;
+
+  case 2:
+    lru(Requests, Pages, Frames);
+    break;
+
+  case 3:
+    optimal(Requests, Pages, Frames);
+    break;
+  }
 
   free(Requests.list);
   free(Pages.list);
