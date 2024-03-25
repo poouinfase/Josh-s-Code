@@ -27,13 +27,16 @@ struct FrameList {
 void fifo(struct RequestList, struct PageList, struct FrameList);
 void optimal(struct RequestList, struct PageList, struct FrameList);
 void lru(struct RequestList, struct PageList, struct FrameList);
+
 int coun(int, int, struct RequestList);
 int srch(int, struct FrameList);
+int max(struct RequestList);
+int dist(int srch, int cur, struct RequestList Req);
+
 void prinframs(struct FrameList);
 void shifright(struct FrameList);
-void nullify(struct FrameList);
 void shifrightatind(struct FrameList Frames, int ind);
-int dist(int srch, int cur, struct RequestList Req);
+void nullify(struct FrameList);
 
 int main() {
   struct PageList Pages;
@@ -57,12 +60,8 @@ int main() {
   }
   putchar('\n');
 
-  Pages.len = 0;
-  printf("Number of Pages: ");
-
-  if (0 == scanf("%d", &Pages.len))
-    return -1;
-  putchar('\n');
+  Pages.len = max(Requests);
+  printf("Number of Pages: %d\n", Pages.len);
 
   assert(Pages.len > 0);
 
@@ -222,4 +221,14 @@ void nullify(struct FrameList Frames) {
   for (int i = 0; i < Frames.len; i++) {
     Frames.list[i] = NULL;
   }
+}
+
+int max(struct RequestList Req) {
+  int ma = Req.list[0];
+
+  for (int i = 0; i < Req.len; i++)
+    if (Req.list[i] > ma)
+      ma = Req.list[i];
+
+  return ma;
 }
