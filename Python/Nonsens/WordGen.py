@@ -1,6 +1,9 @@
 import random
 
-f = open(r"C:\Users\catte\OneDrive\Documents\My\Qaround\Python\Nonsens\Weight.txt", 'r')
+try:
+    f = open(r"Weight.txt", 'r')
+except FileNotFoundError:
+    f = open(r"C:\Users\catte\OneDrive\Documents\My\Qaround\Python\Nonsens\Weight.txt", 'r')
 weights = eval(f.readline())
 f.close()
 
