@@ -1,6 +1,6 @@
 import random
 
-f = open("Weight.txt", 'r')
+f = open(r"C:\Users\catte\OneDrive\Documents\My\Qaround\Python\Nonsens\Weight.txt", 'r')
 weights = eval(f.readline())
 f.close()
 
