@@ -206,9 +206,236 @@ public:
   void out() {
     ByteArray->print();
     std::string hash = ByteArray->transform();
-    std::cout << "HASH: " << hash << std::endl;
+    std::cout << "SHA-512 HASH: " << hash << std::endl;
   }
 
   ~Sha512() { delete ByteArray; }
 };
-int main() { Sha512(std::string("HELLO")).out(); }
+
+#define BLOCKSIZE 16
+
+class MD5ByteArray : public WordArray {
+protected:
+  uint32_t A = 0x67452301;
+  uint32_t B = 0xefcdab89;
+  uint32_t C = 0x98badcfe;
+  uint32_t D = 0x10325476;
+
+  const uint32_t K[64] = {
+      0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a,
+      0xa8304613, 0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
+      0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 0xf61e2562, 0xc040b340,
+      0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8,
+      0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8,
+      0x676f02d9, 0x8d2a4c8a, 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c,
+      0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa,
+      0xd4ef3085, 0x04881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,
+      0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92,
+      0xffeff47d, 0x85845dd1, 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
+      0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};
+
+  /*
+   * Constants for the MD5 Transform routine as defined in RFC 1321
+   */
+  const uint32_t S1[4] = {7, 12, 17, 22};
+  const uint32_t S2[4] = {5, 9, 14, 20};
+  const uint32_t S3[4] = {4, 11, 16, 23};
+  const uint32_t S4[4] = {6, 10, 15, 21};
+
+  /*
+   * Function to perform the cyclic left rotation of blocks of data
+   */
+  inline uint32_t CLROT(uint32_t data, uint32_t shift_bits) {
+    return (data << shift_bits) | (data >> (32 - shift_bits));
+  }
+
+  inline uint32_t F(uint32_t x, uint32_t y, uint32_t z) {
+    return (x & y) | (~x & z);
+  };
+  inline uint32_t G(uint32_t x, uint32_t y, uint32_t z) {
+    return (x & z) | (y & ~z);
+  };
+  inline uint32_t H(uint32_t x, uint32_t y, uint32_t z) { return x ^ y ^ z; };
+  inline uint32_t I(uint32_t x, uint32_t y, uint32_t z) {
+    return y ^ (x | ~z);
+  };
+
+  inline void FF(unsigned int &a, unsigned int b, unsigned int c,
+                 unsigned int d, unsigned int Xk, unsigned int s,
+                 unsigned int i) {
+
+    a += F(b, c, d) + Xk + K[i];
+    a = CLROT(a, S1[s]);
+    a += b;
+  };
+
+  inline void GG(unsigned int &a, unsigned int b, unsigned int c,
+                 unsigned int d, unsigned int Xk, unsigned int s,
+                 unsigned int i) {
+
+    a += G(b, c, d) + Xk + K[i];
+    a = CLROT(a, S2[s]);
+    a += b;
+  };
+
+  inline void HH(unsigned int &a, unsigned int b, unsigned int c,
+                 unsigned int d, unsigned int Xk, unsigned int s,
+                 unsigned int i) {
+
+    a += H(b, c, d) + Xk + K[i];
+    a = CLROT(a, S3[s]);
+    a += b;
+  };
+  inline void II(unsigned int &a, unsigned int b, unsigned int c,
+                 unsigned int d, unsigned int Xk, unsigned int s,
+                 unsigned int i) {
+
+    a += I(b, c, d) + Xk + K[i];
+    a = CLROT(a, S4[s]);
+    a += b;
+  };
+
+public:
+  MD5ByteArray(int le) : WordArray(le) {}
+
+  void procBlock(int ind) {
+    unsigned int AA = A, BB = B, CC = C, DD = D;
+
+    uint32_t X[16];
+    for (int i = ind; i < ind + BLOCKSIZE; i++) {
+      X[i - ind] = get1Byte(i + 4 * (i + ind)) << 0 |
+                   get1Byte(1 + i + 4 * (i + ind)) << 8 |
+                   get1Byte(2 + i + 4 * (i + ind)) << 16 |
+                   get1Byte(3 + i + 4 * (i + ind)) << 24;
+    }
+
+    /* Round 1 */
+    FF(A, B, C, D, X[0], 0, 0);
+    FF(D, A, B, C, X[1], 1, 1);
+    FF(C, D, A, B, X[2], 2, 2);
+    FF(B, C, D, A, X[3], 3, 3);
+    FF(A, B, C, D, X[4], 0, 4);
+    FF(D, A, B, C, X[5], 1, 5);
+    FF(C, D, A, B, X[6], 2, 6);
+    FF(B, C, D, A, X[7], 3, 7);
+    FF(A, B, C, D, X[8], 0, 8);
+    FF(D, A, B, C, X[9], 1, 9);
+    FF(C, D, A, B, X[10], 2, 10);
+    FF(B, C, D, A, X[11], 3, 11);
+    FF(A, B, C, D, X[12], 0, 12);
+    FF(D, A, B, C, X[13], 1, 13);
+    FF(C, D, A, B, X[14], 2, 14);
+    FF(B, C, D, A, X[15], 3, 15);
+
+    /* Round 2 */
+    GG(A, B, C, D, X[1], 0, 16);
+    GG(D, A, B, C, X[6], 1, 17);
+    GG(C, D, A, B, X[11], 2, 18);
+    GG(B, C, D, A, X[0], 3, 19);
+    GG(A, B, C, D, X[5], 0, 20);
+    GG(D, A, B, C, X[10], 1, 21);
+    GG(C, D, A, B, X[15], 2, 22);
+    GG(B, C, D, A, X[4], 3, 23);
+    GG(A, B, C, D, X[9], 0, 24);
+    GG(D, A, B, C, X[14], 1, 25);
+    GG(C, D, A, B, X[3], 2, 26);
+    GG(B, C, D, A, X[8], 3, 27);
+    GG(A, B, C, D, X[13], 0, 28);
+    GG(D, A, B, C, X[2], 1, 29);
+    GG(C, D, A, B, X[7], 2, 30);
+    GG(B, C, D, A, X[12], 3, 31);
+
+    /* Round 3 */
+    HH(A, B, C, D, X[5], 0, 32);
+    HH(D, A, B, C, X[8], 1, 33);
+    HH(C, D, A, B, X[11], 2, 34);
+    HH(B, C, D, A, X[14], 3, 35);
+    HH(A, B, C, D, X[1], 0, 36);
+    HH(D, A, B, C, X[4], 1, 37);
+    HH(C, D, A, B, X[7], 2, 38);
+    HH(B, C, D, A, X[10], 3, 39);
+    HH(A, B, C, D, X[13], 0, 40);
+    HH(D, A, B, C, X[0], 1, 41);
+    HH(C, D, A, B, X[3], 2, 42);
+    HH(B, C, D, A, X[6], 3, 43);
+    HH(A, B, C, D, X[9], 0, 44);
+    HH(D, A, B, C, X[12], 1, 45);
+    HH(C, D, A, B, X[15], 2, 46);
+    HH(B, C, D, A, X[2], 3, 47);
+
+    /* Round 4 */
+    II(A, B, C, D, X[0], 0, 48);
+    II(D, A, B, C, X[7], 1, 49);
+    II(C, D, A, B, X[14], 2, 50);
+    II(B, C, D, A, X[5], 3, 51);
+    II(A, B, C, D, X[12], 0, 52);
+    II(D, A, B, C, X[3], 1, 53);
+    II(C, D, A, B, X[10], 2, 54);
+    II(B, C, D, A, X[1], 3, 55);
+    II(A, B, C, D, X[8], 0, 56);
+    II(D, A, B, C, X[15], 1, 57);
+    II(C, D, A, B, X[6], 2, 58);
+    II(B, C, D, A, X[13], 3, 59);
+    II(A, B, C, D, X[4], 0, 60);
+    II(D, A, B, C, X[11], 1, 61);
+    II(C, D, A, B, X[2], 2, 62);
+    II(B, C, D, A, X[9], 3, 63);
+
+    A += AA;
+    B += BB;
+    C += CC;
+    D += DD;
+  }
+
+  std::string transform() {
+    for (int i = 0; i < len; i += BLOCKSIZE) {
+      procBlock(i);
+    }
+    std::stringstream strout;
+    strout << std::setfill('0') << std::setw(8) << std::hex << A;
+    strout << std::setfill('0') << std::setw(8) << std::hex << B;
+    strout << std::setfill('0') << std::setw(8) << std::hex << C;
+    strout << std::setfill('0') << std::setw(8) << std::hex << D;
+    return strout.str();
+  }
+};
+
+class MD5 {
+protected:
+  MD5ByteArray *ByteArray;
+  __uint128_t le;
+  __uint128_t padding;
+  __uint128_t blockBytesLen;
+
+public:
+  MD5(std::string msg) {
+    le = msg.length();
+    padding = ((512 - (8 * le) - 64) % 512) / 8;
+    blockBytesLen = padding + le + 8;
+    // message + padding 1 + padding 2;
+
+    ByteArray = new MD5ByteArray(blockBytesLen);
+    for (__uint128_t i = 0; i < le; i++) {
+      ByteArray->setByte(i, msg.c_str()[i]);
+    }
+    ByteArray->setByte(le, 1 << 7);
+
+    ByteArray->set64Bits(((padding + le + 1) >> 3), le);
+  }
+
+  void out() {
+    ByteArray->print();
+    std::string hash = ByteArray->transform();
+    std::cout << "MD5 HASH: " << hash << std::endl;
+  }
+
+  ~MD5() { delete ByteArray; }
+};
+
+int main() {
+  std::string Message;
+  std::cin >> Message;
+
+  Sha512(Message).out();
+  MD5(Message).out();
+}
