@@ -1,7 +1,7 @@
 #include "Encrypt.h"
 
 int main() {
-  std::cout << "CHOICES:\n1.SHA-512\n2.MD5" << std::endl;
+  std::cout << "CHOICES:\n1.SHA-512\n2.MD5\n3.SHA-1" << std::endl;
 
   int n = 0;
   std::cin >> n;
@@ -18,6 +18,9 @@ int main() {
     break;
   case 2:
     MD5(Message).out();
+    break;
+  case 3:
+    Sha1(Message).out();
     break;
   }
 }
