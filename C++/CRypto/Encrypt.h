@@ -8,7 +8,7 @@ Encrypt
 #include <stdint.h>
 #include <stdio.h>
 
-class WordArray {
+    class WordArray {
 protected:
   __uint128_t len;
   __uint128_t bitlen;
@@ -125,7 +125,9 @@ protected:
       0x431d67c49c100d4c, 0x4cc5d4becb3e42b6, 0x597f299cfc657e2a,
       0x5fcb6fab3ad6faec, 0x6c44198c4a475817};
 
-  inline uint64_t ROTR(int64_t v, int n) { return (v >> n) | (v << (sizeof(v) - n)); }
+  inline uint64_t ROTR(int64_t v, int n) {
+    return (v >> n) | (v << (sizeof(v) - n));
+  }
   inline uint64_t CH(int64_t e, int64_t f, int64_t g) {
     return (e & f) ^ (~e & g);
   }
@@ -273,35 +275,31 @@ protected:
     return y ^ (x | ~z);
   };
 
-  inline void FF(unsigned int &a, unsigned int b, unsigned int c,
-                 unsigned int d, unsigned int Xk, unsigned int s,
-                 unsigned int i) {
+  inline void FF(uint32_t &a, uint32_t b, uint32_t c, uint32_t d, uint32_t Xk,
+                 uint32_t s, uint32_t i) {
 
     a += F(b, c, d) + Xk + K[i];
     a = CLROT(a, S1[s]);
     a += b;
   };
 
-  inline void GG(unsigned int &a, unsigned int b, unsigned int c,
-                 unsigned int d, unsigned int Xk, unsigned int s,
-                 unsigned int i) {
+  inline void GG(uint32_t &a, uint32_t b, uint32_t c, uint32_t d, uint32_t Xk,
+                 uint32_t s, uint32_t i) {
 
     a += G(b, c, d) + Xk + K[i];
     a = CLROT(a, S2[s]);
     a += b;
   };
 
-  inline void HH(unsigned int &a, unsigned int b, unsigned int c,
-                 unsigned int d, unsigned int Xk, unsigned int s,
-                 unsigned int i) {
+  inline void HH(uint32_t &a, uint32_t b, uint32_t c, uint32_t d, uint32_t Xk,
+                 uint32_t s, uint32_t i) {
 
     a += H(b, c, d) + Xk + K[i];
     a = CLROT(a, S3[s]);
     a += b;
   };
-  inline void II(unsigned int &a, unsigned int b, unsigned int c,
-                 unsigned int d, unsigned int Xk, unsigned int s,
-                 unsigned int i) {
+  inline void II(uint32_t &a, uint32_t b, uint32_t c, uint32_t d, uint32_t Xk,
+                 uint32_t s, uint32_t i) {
 
     a += I(b, c, d) + Xk + K[i];
     a = CLROT(a, S4[s]);
@@ -457,15 +455,17 @@ protected:
   uint32_t h3 = 0x10325476;
   uint32_t h4 = 0xC3D2E1F0;
 
-  inline uint32_t ROTR(int32_t v, int n) { return (v >> n) | (v << (sizeof(v) - n)); }
-  inline uint32_t ROTL(int32_t v, int n) { return (v << n) | (v >> (sizeof(v) - n)); }
+  inline uint32_t ROTR(int32_t v, int n) {
+    return (v >> n) | (v << (sizeof(v) - n));
+  }
+  inline uint32_t ROTL(int32_t v, int n) {
+    return (v << n) | (v >> (sizeof(v) - n));
+  }
 
   inline uint32_t F0(int32_t e, int32_t f, int32_t g) {
     return (e & f) | (~e & g);
   }
-  inline uint32_t F1(int32_t e, int32_t f, int32_t g) {
-    return e^f^g;
-  }
+  inline uint32_t F1(int32_t e, int32_t f, int32_t g) { return e ^ f ^ g; }
   inline uint64_t F2(int32_t e, int32_t f, int32_t g) {
     return (e & f) | (e & g) | (f & g);
   }
@@ -473,57 +473,53 @@ protected:
 public:
   Sha1ByteArray(int le) : WordArray(le) { assert(0 == (le % 64)); }
 
-  void procBlock(int64_t ind){
+  void procBlock(int64_t ind) {
 
     uint32_t TMP[80];
     for (int c = 0; c < 80; c++) {
       TMP[c] = 0x00;
     }
-      for (int i = 0; i < 16; i++)
-        TMP[i] = get32Bits(ind+i);
+    for (int i = 0; i < 16; i++)
+      TMP[i] = get32Bits(ind + i);
 
-    for (int i = 16;i<80;i++)
-        TMP[i] = ROTL((TMP[i-3] ^ TMP[i-8] ^ TMP[i-14] ^ TMP[i-16]),1);
+    for (int i = 16; i < 80; i++)
+      TMP[i] = ROTL((TMP[i - 3] ^ TMP[i - 8] ^ TMP[i - 14] ^ TMP[i - 16]), 1);
 
-    uint32_t a=h0;
-    uint32_t b=h1;
-    uint32_t c=h2;
-    uint32_t d=h3;
-    uint32_t e=h4;
-    for(int i=0;i<80;i++){
+    uint32_t a = h0;
+    uint32_t b = h1;
+    uint32_t c = h2;
+    uint32_t d = h3;
+    uint32_t e = h4;
+    for (int i = 0; i < 80; i++) {
       uint32_t f;
       uint32_t k;
-      if(i<=19){
-        f=F0(b,c,d);
+      if (i <= 19) {
+        f = F0(b, c, d);
         k = 0x6ED9EBA1;
-      }
-      else if (i<=39) {
-        f=F1(b,c,d);
+      } else if (i <= 39) {
+        f = F1(b, c, d);
         k = 0x8F1BBCDC;
-      }
-      else if (i<=59) {
-        f=F2(b,c,d);
+      } else if (i <= 59) {
+        f = F2(b, c, d);
         k = 0x8F1BBCDC;
-      }
-      else if (i<=79) {
-        f=F1(b,c,d);
+      } else if (i <= 79) {
+        f = F1(b, c, d);
         k = 0xCA62C1D6;
       }
 
-      uint32_t temp=ROTL(a,5)+f+e+k+TMP[i];
-      e=d;
-      d=c;
-      c=ROTL(b,30);
-      b=a;
-      a=temp;
+      uint32_t temp = ROTL(a, 5) + f + e + k + TMP[i];
+      e = d;
+      d = c;
+      c = ROTL(b, 30);
+      b = a;
+      a = temp;
     }
-    h0+=a;
-    h1+=b;
-    h2+=c;
-    h3+=d;
-    h4+=e;
+    h0 += a;
+    h1 += b;
+    h2 += c;
+    h3 += d;
+    h4 += e;
   }
-
 
   std::string transform() {
     for (int i = 0; i < len; i += SHA1BLOCKSIZE) {
