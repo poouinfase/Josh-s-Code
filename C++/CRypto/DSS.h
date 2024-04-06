@@ -84,10 +84,9 @@ public:
     return v == r;
   }
 
-  int verify(DSS Sender) {
+  int verify(DSS Sender, uint64_t rRec, uint64_t sRec) {
 
     uint64_t *pub = Sender.getPubKey();
-    auto [sRec, rRec] = Sender.signGet();
     return verifyMath(pub, rRec, sRec, Sender);
   }
 };
@@ -95,8 +94,8 @@ public:
 int DssEg(std::string message) {
   srand(time(NULL));
   DSS temp = DSS(11, 5, 2, 3);
-  temp.SignProd(message);
-  if (temp.verify(temp)) {
+  auto [sRec, rRec] = temp.SignProd(message);
+  if (temp.verify(temp, sRec, rRec)) {
     std::cout << "VERIFIED" << std::endl;
   } else {
     std::cout << "NOT VERIFIED" << std::endl;
