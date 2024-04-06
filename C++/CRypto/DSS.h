@@ -92,16 +92,16 @@ public:
   }
 };
 
-int main() {
+int DssEg(std::string message) {
   srand(time(NULL));
   DSS temp = DSS(11, 5, 2, 3);
-  std::string message("HELLO");
   temp.SignProd(message);
   if (temp.verify(temp)) {
     std::cout << "VERIFIED" << std::endl;
   } else {
     std::cout << "NOT VERIFIED" << std::endl;
   }
+  return 0;
 }
 
 #endif // !DSS
