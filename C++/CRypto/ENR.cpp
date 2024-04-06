@@ -27,24 +27,24 @@ public:
   }
   ~WordArray() { free(data); }
   uint8_t get1Bit(__uint128_t ind) {
-    if (ind > len)
+    if (ind >= len)
       return -1;
     uint8_t byte = data[ind / 8];
     return byte & (ind % 8);
   }
   uint8_t get1Byte(__uint128_t ind) {
-    if (ind > len)
+    if (ind >= len)
       return -1;
     return data[ind];
   }
   uint64_t get64Bits(__uint128_t ind) {
-    if (ind > len / 8)
+    if (ind >= len / 8)
       return -1;
     uint64_t *data64 = (uint64_t *)data;
     return __builtin_bswap64(data64[ind]);
   }
   void set1Bits(__uint128_t ind, uint8_t ele) {
-    if (ind > bitlen || ele > 1)
+    if (ind >= bitlen || ele > 1)
       return;
 
     if (ele)
@@ -53,13 +53,13 @@ public:
       data[ind / 8] &= ele << (ind % 8);
   }
   void setByte(__uint128_t ind, uint8_t ele) {
-    if (ind > len)
+    if (ind >= len)
       return;
     data[ind] = ele;
   }
 
   void set64Bits(__uint128_t ind, uint64_t ele) {
-    if (ind > len / 8)
+    if (ind >= len / 8)
       return;
     setByte(ind * 8 + 7, ele & 0xff);
     ele >>= 8;
