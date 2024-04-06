@@ -1,4 +1,4 @@
-#include "ENR.cpp"
+#include "Encrypt.h"
 
 int main() {
   std::cout << "CHOICES:\n1.SHA-512\n2.MD5" << std::endl;
