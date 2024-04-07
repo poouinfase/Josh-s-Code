@@ -1,12 +1,14 @@
 #ifndef DSS
+#define DSS
 
+DSS
 #include "Encrypt.h"
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
 #include <ctime>
 
-class DSS {
+    class DSS {
 protected:
   uint64_t pubkey[4], priKey;
   uint64_t secretNum;
@@ -15,12 +17,13 @@ protected:
   uint64_t hasconv(std::string msg) {
     uint64_t out = 0;
     uint64_t pw = 0;
-    for (int i = msg.length(); i >= 20; i--) {
+    for (int i = msg.length(); i; i--) {
       unsigned char dig = msg.c_str()[i];
       dig += -'0';
       if (dig > 9)
         dig += -'a' + 10 + '0';
       out += dig * pow(16, pw++);
+      out %= 1 << 20;
     }
     return out;
   }
