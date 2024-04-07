@@ -1,12 +1,13 @@
-#ifndef DSS
-#define DSS
+#ifndef DS
+#define DS
 
-DSS
+DS
 #include "Encrypt.h"
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
 #include <ctime>
+#include <stdint.h>
 
     class DSS {
 protected:
@@ -15,14 +16,14 @@ protected:
   uint64_t hash;
 
   uint64_t hasconv(std::string msg) {
-    uint64_t out = 0;
+    __uint128_t out = 0;
     uint64_t pw = 0;
     for (int i = msg.length(); i; i--) {
       unsigned char dig = msg.c_str()[i];
       dig += -'0';
       if (dig > 9)
         dig += -'a' + 10 + '0';
-      out += dig * pow(16, pw++);
+      out += dig * powAh(16, pw++);
       out %= 1 << 20;
     }
     return out;
@@ -43,16 +44,32 @@ protected:
     return -1;
   }
 
+  __uint128_t powAh(uint64_t base, uint32_t exp) {
+    if (base == 0)
+      return 0;
+    __uint128_t t = 1;
+    while (exp > 0) { // Simplifying multiplication by squaring itself
+      if ((exp & 1) == 1)
+        t = t * base;
+      base = base * base;
+      exp >>= 1;
+    }
+    return t;
+  }
+
 public:
-  DSS(uint64_t p, uint64_t q, uint64_t h, uint64_t x) { keyGen(p, q, h, x); }
+  DSS(uint64_t p, uint64_t q, uint64_t h, uint64_t x) {
+    /* std::cout << int(powAh(16, 5)) << std::endl; */
+    keyGen(p, q, h, x);
+  }
   std::string Message;
   void keyGen(uint64_t p, uint64_t q, uint64_t h, uint64_t x) {
     x = x % q;
-    uint64_t g = fmod(pow(h, (p - 1) / q), p);
+    uint64_t g = fmod(powAh(h, (p - 1) / q), p);
     pubkey[0] = p;
     pubkey[1] = q;
     pubkey[2] = g;
-    pubkey[3] = fmod((uint64_t)pow(g, x), p);
+    pubkey[3] = fmod((uint64_t)powAh(g, x), p);
     DSS::priKey = x;
   }
 
@@ -64,7 +81,7 @@ public:
 
   std::pair<uint64_t, uint64_t> signGet() {
     uint64_t r, s;
-    r = fmod(fmod(pow(pubkey[2], secretNum), pubkey[0]), pubkey[1]);
+    r = fmod(fmod(powAh(pubkey[2], secretNum), pubkey[0]), pubkey[1]);
     s = fmod(((hash + priKey * r) / secretNum), pubkey[1]);
     return {s, r};
   }
@@ -82,7 +99,8 @@ public:
     uint64_t w = modInverse(s, pub[1]);
     uint64_t u1 = fmod(HM * w, pub[1]);
     uint64_t u2 = fmod(r * w, pub[1]);
-    uint64_t v = fmod(fmod(pow(pub[2], u1) * pow(pub[3], u2), pub[0]), pub[1]);
+    uint64_t v =
+        fmod(fmod(powAh(pub[2], u1) * powAh(pub[3], u2), pub[0]), pub[1]);
 
     return v == r;
   }
@@ -106,4 +124,4 @@ int DssEg(std::string message) {
   return 0;
 }
 
-#endif // !DSS
+#endif // !DS
