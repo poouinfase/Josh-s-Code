@@ -1,3 +1,6 @@
+#define CHATGPT
+
+#ifndef CHATGPT
 #ifndef DS
 #define DS
 
@@ -75,7 +78,7 @@ public:
 
   uint64_t *getPubKey() { return pubkey; }
   uint64_t HashGen(std::string msg) {
-    hash = hasconv(MD5(msg).hash());
+    hash = hasconv(Sha1(msg).hash());
     return hash;
   }
 
@@ -125,3 +128,96 @@ int DssEg(std::string message) {
 }
 
 #endif // !DS
+
+#else
+#include <cmath>
+#include <iostream>
+#include <random>
+#include <string>
+
+// Define large prime numbers (p and q) and generator (g)
+const int p = 11;
+const int q = 5;
+const int g = 2;
+
+// Function to calculate modular exponentiation (base^exp % mod)
+int modExp(int base, int exp, int mod) {
+  int result = 1;
+  base = base % mod;
+  while (exp > 0) {
+    if (exp % 2 == 1) {
+      result = (result * base) % mod;
+    }
+    exp = exp >> 1;
+    base = (base * base) % mod;
+  }
+  return result;
+}
+
+// Function to calculate modular inverse
+int modInv(int base, int mod) { return modExp(base, mod - 2, mod); }
+
+// Function to generate key pair
+std::pair<int, int> generateKeyPair() {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<int> dist(1, q - 1);
+  int privateKey = dist(gen);
+  int publicKey = modExp(g, privateKey, p);
+  return std::make_pair(privateKey, publicKey);
+}
+
+int Hash(const std::string &message) {
+  int hashValue = 0;
+  for (char c : message) {
+    hashValue += static_cast<int>(c);
+  }
+  return hashValue;
+}
+
+// Function to sign a message
+std::pair<int, int> signMessage(const std::string &message, int privateKey) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<int> dist(1, q - 1);
+  int k = dist(gen);
+  int r = modExp(g, k, p) % q;
+  int s = (modInv(k, q) * (Hash(message) + privateKey * r)) % q;
+  return std::make_pair(r, s);
+}
+
+// Function to verify signature
+bool verifySignature(const std::string &message, int r, int s, int publicKey) {
+  int w = modInv(s, q);
+  int u1 = (Hash(message) * w) % q;
+  int u2 = (r * w) % q;
+  int v = ((modExp(g, u1, p) * modExp(publicKey, u2, p)) % p) % q;
+  return v == r;
+}
+
+// Dummy hash function (replace with a secure hash function)
+
+int DssEg(std::string message) {
+  // Generate key pair
+  std::pair<int, int> keys = generateKeyPair();
+  int privateKey = keys.first;
+  int publicKey = keys.second;
+
+  // Sign message
+  /* std::string message = "Hello, world!"; */
+  std::pair<int, int> signature = signMessage(message, privateKey);
+  int r = signature.first;
+  int s = signature.second;
+
+  // Verify signature
+  bool isValid = verifySignature(message, r, s, publicKey);
+
+  if (isValid) {
+    std::cout << "Signature is valid." << std::endl;
+  } else {
+    std::cout << "Signature is not valid." << std::endl;
+  }
+
+  return 0;
+}
+#endif // !CHATGPT
