@@ -566,12 +566,6 @@ public:
   ~Sha1() { delete ByteArray; }
 };
 
-#include <cmath>
-#include <cstdint>
-#include <cstdlib>
-#include <ctime>
-#include <stdint.h>
-
 class DSS {
 protected:
   uint64_t pubkey[4], priKey;
