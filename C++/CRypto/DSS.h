@@ -1,4 +1,4 @@
-#define CHATGPT
+/* #define CHATGPT */
 
 #ifndef CHATGPT
 #ifndef DS
@@ -16,7 +16,7 @@ DS
 protected:
   uint64_t pubkey[4], priKey;
   uint64_t secretNum;
-  uint64_t hash;
+  uint64_t HM;
 
   uint64_t hasconv(std::string msg) {
     __uint128_t out = 0;
@@ -61,11 +61,12 @@ protected:
   }
 
 public:
-  DSS(uint64_t p, uint64_t q, uint64_t h, uint64_t x) {
+  std::string Message;
+  DSS(uint64_t p, uint64_t q, uint64_t h, uint64_t x, uint64_t hash) {
     /* std::cout << int(powAh(16, 5)) << std::endl; */
     keyGen(p, q, h, x);
+    HM = hash;
   }
-  std::string Message;
   void keyGen(uint64_t p, uint64_t q, uint64_t h, uint64_t x) {
     x = x % q;
     uint64_t g = fmod(powAh(h, (p - 1) / q), p);
@@ -74,18 +75,20 @@ public:
     pubkey[2] = g;
     pubkey[3] = fmod((uint64_t)powAh(g, x), p);
     DSS::priKey = x;
+    std::cout << "p: " << p << " q: " << q << " g: " << g << " y: " << pubkey[3]
+              << std::endl;
   }
 
   uint64_t *getPubKey() { return pubkey; }
   uint64_t HashGen(std::string msg) {
-    hash = hasconv(Sha1(msg).hash());
-    return hash;
+    HM = hasconv(Sha1(msg).hash());
+    return HM;
   }
 
   std::pair<uint64_t, uint64_t> signGet() {
     uint64_t r, s;
     r = fmod(fmod(powAh(pubkey[2], secretNum), pubkey[0]), pubkey[1]);
-    s = fmod(((hash + priKey * r) / secretNum), pubkey[1]);
+    s = fmod(((HM + priKey * r) / secretNum), pubkey[1]);
     return {s, r};
   }
 
@@ -93,23 +96,25 @@ public:
     Message = msg;
     HashGen(msg);
     secretNum = 3;
-    return signGet();
+    auto [s, r] = signGet();
+    std::cout << "CERTIFICATE: s: " << s << " r: " << r << std::endl;
+    return {s, r};
   }
 
   int verifyMath(uint64_t *pub, uint64_t r, uint64_t s, DSS S) {
-    uint64_t HM = HashGen(S.Message);
-
     uint64_t w = modInverse(s, pub[1]);
     uint64_t u1 = fmod(HM * w, pub[1]);
     uint64_t u2 = fmod(r * w, pub[1]);
     uint64_t v =
         fmod(fmod(powAh(pub[2], u1) * powAh(pub[3], u2), pub[0]), pub[1]);
 
+    std::cout << "w: " << w << " u1: " << u1 << " u2: " << u2 << " v: " << v
+              << std::endl;
+
     return v == r;
   }
 
   int verify(DSS Sender, uint64_t rRec, uint64_t sRec) {
-
     uint64_t *pub = Sender.getPubKey();
     return verifyMath(pub, rRec, sRec, Sender);
   }
@@ -117,7 +122,12 @@ public:
 
 int DssEg(std::string message) {
   srand(time(NULL));
-  DSS temp = DSS(11, 5, 2, 3);
+  uint64_t p, q, h, x, HM;
+  std::cout << "Please provide p q h x\n";
+  std::cin >> p >> q >> h >> x;
+  std::cout << "Provide HM: ";
+  std::cin >> HM;
+  DSS temp = DSS(p, q, h, x, HM);
   auto [sRec, rRec] = temp.SignProd(message);
   if (temp.verify(temp, sRec, rRec)) {
     std::cout << "VERIFIED" << std::endl;
