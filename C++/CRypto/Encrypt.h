@@ -14,6 +14,12 @@ protected:
   __uint128_t bitlen;
   uint8_t *data;
 
+  inline void InsetByte(__uint128_t ind, uint8_t ele) {
+    if (ind < len)
+      return;
+    data[ind] = ele;
+  }
+
 public:
   WordArray(int le) {
     this->len = le;
@@ -24,31 +30,26 @@ public:
   }
   ~WordArray() { free(data); }
   uint8_t get1Bit(__uint128_t ind) {
-    if (ind >= len)
-      return -1;
+    assert (ind < len);
     uint8_t byte = data[ind / 8];
     return byte & (ind % 8);
   }
   uint8_t get1Byte(__uint128_t ind) {
-    if (ind >= len)
-      return -1;
     return data[ind];
   }
   uint64_t get64Bits(__uint128_t ind) {
-    if (ind >= len / 8)
-      return -1;
+    assert (ind < len / 8);
     uint64_t *data64 = (uint64_t *)data;
     return __builtin_bswap64(data64[ind]);
   }
   uint64_t get32Bits(__uint128_t ind) {
-    if (ind >= len / 4)
-      return -1;
+    assert (ind < len / 4);
+
     uint32_t *data32 = (uint32_t *)data;
-    return __builtin_bswap64(data32[ind]);
+    return __builtin_bswap32(data32[ind]);
   }
   void set1Bits(__uint128_t ind, uint8_t ele) {
-    if (ind >= bitlen || ele > 1)
-      return;
+    assert(ind < bitlen && ele <= 1);
 
     if (ele)
       data[ind / 8] |= ele << (ind % 8);
@@ -56,29 +57,28 @@ public:
       data[ind / 8] &= ele << (ind % 8);
   }
   void setByte(__uint128_t ind, uint8_t ele) {
-    if (ind >= len)
-      return;
+    assert (ind < len);
     data[ind] = ele;
   }
 
   void set64Bits(__uint128_t ind, uint64_t ele) {
-    if (ind >= len / 8)
-      return;
-    setByte(ind * 8 + 7, ele & 0xff);
+    assert(ind <= len / 8);
+
+    InsetByte(ind * 8 + 7, ele & 0xff);
     ele >>= 8;
-    setByte(ind * 8 + 6, ele & 0xff);
+    InsetByte(ind * 8 + 6, ele & 0xff);
     ele >>= 8;
-    setByte(ind * 8 + 5, ele & 0xff);
+    InsetByte(ind * 8 + 5, ele & 0xff);
     ele >>= 8;
-    setByte(ind * 8 + 4, ele & 0xff);
+    InsetByte(ind * 8 + 4, ele & 0xff);
     ele >>= 8;
-    setByte(ind * 8 + 3, ele & 0xff);
+    InsetByte(ind * 8 + 3, ele & 0xff);
     ele >>= 8;
-    setByte(ind * 8 + 2, ele & 0xff);
+    InsetByte(ind * 8 + 2, ele & 0xff);
     ele >>= 8;
-    setByte(ind * 8 + 1, ele & 0xff);
+    InsetByte(ind * 8 + 1, ele & 0xff);
     ele >>= 8;
-    setByte(ind * 8 + 0, ele & 0xff);
+    InsetByte(ind * 8 + 0, ele & 0xff);
   }
   void print() {
     for (int i = 0; i < len; i++) {
