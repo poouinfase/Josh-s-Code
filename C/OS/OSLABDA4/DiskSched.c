@@ -61,7 +61,7 @@ int FIFOInit(ReqQue *req, rwHead *head) {
   return index;
 }
 
-int FIFO(ReqQue *req, rwHead *head) {
+int FCFS(ReqQue *req, rwHead *head) {
   int ind = FIFOInit(req, head);
   if (ind != -1)
     req->list[ind] = -1;
@@ -184,11 +184,34 @@ int EvalAlgo(int (*Alg)(ReqQue *, rwHead *), ReqQue *req, rwHead *head) {
 }
 
 int main(int argc, char *argv[]) {
+
+  int n = 0;
+  printf("CHOICES:\n1-FCFS\n2-SSTF\n3-SCAN\n4-CSCAN\n5-CLOOK\n");
+  scanf("%d", &n);
+
   ReqQue *Req = ReqInit();
-  // printReq(Req);
-  // putchar('\n');
-  rwHead temp = {50, 199}; // curr max
-  EvalAlgo(&CLOOK, Req, &temp);
+  printf("Disk head location and Size of disk please\n");
+  rwHead temp = {0, 199}; // curr max
+  scanf("%d %d", &temp.curr, &temp.max);
+
+  switch (n) {
+  case 1:
+    EvalAlgo(&FCFS, Req, &temp);
+    break;
+  case 2:
+    EvalAlgo(&SSTF, Req, &temp);
+    break;
+  case 3:
+    EvalAlgo(&SCAN, Req, &temp);
+    break;
+  case 4:
+    EvalAlgo(&CSCAN, Req, &temp);
+    break;
+  case 5:
+    EvalAlgo(&CLOOK, Req, &temp);
+    break;
+  }
+
   ReqFree(Req);
 
   return EXIT_SUCCESS;
