@@ -65,7 +65,7 @@ int FCFS(ReqQue *req, rwHead *head) {
   int ind = FIFOInit(req, head);
   if (ind != -1)
     req->list[ind] = -1;
-  printReq(req);
+  // printReq(req);
   return ind;
 }
 
