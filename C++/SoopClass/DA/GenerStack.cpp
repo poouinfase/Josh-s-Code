@@ -80,70 +80,71 @@ public:
   }
 };
 
-int test1() {
+class Test {
+private:
+  char name[50];
+  int Uid;
+
+public:
+  Test(int i = 0) {
+    name[0] = 0;
+    Uid = i;
+  }
+  void input() {
+    cout << "Name? ";
+    cin >> name;
+  }
+  void out() { cout << "Uid: " << Uid << "\tName: " << name << endl; }
+};
+
+int main() {
   Stack a = Stack();
 
-  uint32_t ittr = 0;
-  cout << "How Many Datas: ";
-  cin >> ittr;
-
-  for (int i = 0; i < ittr; i++) {
-    int8_t ti = 0;
+  int letteri = 0;
+  cout << "How Many Characters?: ";
+  cin >> letteri;
+  for (int i = 0; i < letteri; i++) {
+    char ti;
     cin >> ti;
     a.push(ti);
   }
 
-  for (int i = 0; i < ittr / 2; i++) {
-    int8_t te = 0;
-    a.pop(&te);
-    cout << te << endl;
+  int Numi = 0;
+  cout << "How Many Numbers?: ";
+  cin >> Numi;
+  for (int i = 0; i < Numi; i++) {
+    int ti;
+    cin >> ti;
+    a.push(ti);
   }
 
-  for (int i = 0; i < ittr / 2; i++) {
-    int16_t te = 0;
-    a.pop(&te);
-    cout << te << endl;
+  int Obji = 0;
+  cout << "How Many Objects?: ";
+  cin >> Obji;
+  for (int i = 0; i < Obji; i++) {
+    Test *ti = new Test(i + 1);
+    ti->input();
+    a.push(ti);
   }
 
-  return 0;
-}
-
-int test2() {
-  Stack a = Stack();
-  chio c = {};
-  strcpy(c.name, "HELLO WORLD");
-  chio *cpt;
-
-  a.push(&c);
-  a.pop(&cpt);
-
-  cout << cpt->name << endl;
-
-  return 0;
-}
-
-#define RAND 8000
-int test3() {
-  Stack a = Stack();
-  srand(time(NULL));
-
-  for (int i = RAND; i >= 0; i--) {
-    a.push(rand());
+  // POPIN
+  for (int i = 0; i < Obji; i++) {
+    Test *ti;
+    a.pop(&ti);
+    ti->out();
   }
 
-  for (int i = RAND; i >= 0; i--) {
-    uint64_t temp = 0;
-    a.pop(&temp);
-    /* cout << int(temp) << endl; */
+  for (int i = 0; i < Numi; i++) {
+    int ti;
+    a.pop(&ti);
+    cout << ti << endl;
+  }
+
+  for (int i = 0; i < letteri; i++) {
+    char ti;
+    a.pop(&ti);
+    cout << ti << endl;
   }
 
   return 0;
-}
-
-int main() {
-  Stack a = Stack();
-  a.push();
-  double in = 0;
-  a.pop(&in);
-  cout << in << endl;
 }
