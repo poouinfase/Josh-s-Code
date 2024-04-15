@@ -34,10 +34,32 @@ One example of a static object that is widely used is std as it grants access to
 Example:
 
 ```c
-void func(int ad){
-  static std::vec<int> lis;
+#include <iostream>
+#include <stdlib.h>
+#include <vector>
+
+void func(int ad) {
+  static std::vector<int> lis;
   lis.push_back(ad);
-  for(auto i=lis.begin();i!=lis.end();i++)
-    cout<<i<<endl;
+  int n = 0;
+  for (int i = 0; i < lis.size(); i++)
+    std::cout << i + 1 << " " << lis[i] << " ";
+  std::cout << std::endl;
+}
+
+int main() {
+  srand(0);
+  for (int i = 0; i < 10; i++)
+    func(rand());
 }
 ```
+
+---
+
+Reference variables are variables that contain the address of another variable.
+Thus we can access a variable by dereferencing a reference variable.
+Often times we use reference variables in order to access objects, arrays and other classes.
+
+Reference variables are what we use to access heap memory, allowing us to use more dynamic programming paradigms and allow us to store and return multiple values.
+
+---
