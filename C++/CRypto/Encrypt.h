@@ -14,11 +14,7 @@ protected:
   __uint128_t bitlen;
   uint8_t *data;
 
-  inline void InsetByte(__uint128_t ind, uint8_t ele) {
-    if (ind < len)
-      return;
-    data[ind] = ele;
-  }
+  inline void InsetByte(__uint128_t ind, uint8_t ele) { data[ind] = ele; }
 
 public:
   WordArray(int le) {
@@ -30,20 +26,18 @@ public:
   }
   ~WordArray() { free(data); }
   uint8_t get1Bit(__uint128_t ind) {
-    assert (ind < len);
+    assert(ind < len);
     uint8_t byte = data[ind / 8];
     return byte & (ind % 8);
   }
-  uint8_t get1Byte(__uint128_t ind) {
-    return data[ind];
-  }
+  uint8_t get1Byte(__uint128_t ind) { return data[ind]; }
   uint64_t get64Bits(__uint128_t ind) {
-    assert (ind < len / 8);
+    assert(ind < len / 8);
     uint64_t *data64 = (uint64_t *)data;
     return __builtin_bswap64(data64[ind]);
   }
   uint64_t get32Bits(__uint128_t ind) {
-    assert (ind < len / 4);
+    assert(ind < len / 4);
 
     uint32_t *data32 = (uint32_t *)data;
     return __builtin_bswap32(data32[ind]);
@@ -57,7 +51,7 @@ public:
       data[ind / 8] &= ele << (ind % 8);
   }
   void setByte(__uint128_t ind, uint8_t ele) {
-    assert (ind < len);
+    assert(ind < len);
     data[ind] = ele;
   }
 
