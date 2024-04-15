@@ -16,9 +16,9 @@ DS
 protected:
   uint64_t pubkey[4], priKey;
   uint64_t secretNum;
-  uint64_t HM;
+  __uint128_t HM;
 
-  uint64_t hasconv(std::string msg) {
+  __uint128_t hasconv(std::string msg) {
     __uint128_t out = 0;
     uint64_t pw = 0;
     for (int i = msg.length(); i; i--) {
@@ -27,7 +27,6 @@ protected:
       if (dig > 9)
         dig += -'a' + 10 + '0';
       out += dig * powAh(16, pw++);
-      out %= 1 << 20;
     }
     return out;
   }
@@ -38,6 +37,7 @@ protected:
         return 0;
     return n <= 1;
   }
+
   inline uint64_t modInverse(int A, int M) {
     for (int X = 1; X < M; X++)
       if (((A % M) * (X % M)) % M == 1)
@@ -62,10 +62,9 @@ protected:
 
 public:
   std::string Message;
-  DSS(uint64_t p, uint64_t q, uint64_t h, uint64_t x, uint64_t hash) {
+  DSS(uint64_t p, uint64_t q, uint64_t h, uint64_t x) {
     /* std::cout << int(powAh(16, 5)) << std::endl; */
     keyGen(p, q, h, x);
-    HM = hash;
   }
   void keyGen(uint64_t p, uint64_t q, uint64_t h, uint64_t x) {
     x = x % q;
@@ -98,6 +97,7 @@ public:
     secretNum = 3;
     auto [s, r] = signGet();
     std::cout << "CERTIFICATE: s: " << s << " r: " << r << std::endl;
+    std::cout << "HASH hm: " << (uint64_t)HM << std::endl;
     return {s, r};
   }
 
@@ -126,8 +126,9 @@ int DssEg(std::string message) {
   std::cout << "Please provide p q h x\n";
   std::cin >> p >> q >> h >> x;
   std::cout << "Provide HM: ";
-  std::cin >> HM;
-  DSS temp = DSS(p, q, h, x, HM);
+
+  DSS temp = DSS(p, q, h, x);
+
   auto [sRec, rRec] = temp.SignProd(message);
   if (temp.verify(temp, sRec, rRec)) {
     std::cout << "VERIFIED" << std::endl;
