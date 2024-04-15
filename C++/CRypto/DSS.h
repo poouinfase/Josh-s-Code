@@ -125,7 +125,6 @@ int DssEg(std::string message) {
   uint64_t p, q, h, x, HM;
   std::cout << "Please provide p q h x\n";
   std::cin >> p >> q >> h >> x;
-  std::cout << "Provide HM: ";
 
   DSS temp = DSS(p, q, h, x);
 
