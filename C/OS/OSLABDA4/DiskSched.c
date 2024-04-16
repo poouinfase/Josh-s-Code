@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
   scanf("%d", &n);
 
   ReqQue *Req = ReqInit();
-  printf("Disk head location and Size of disk please\n");
+  printf("Disk head location and Size of disk please: ");
   rwHead temp = {0, 199}; // curr max
   scanf("%d %d", &temp.curr, &temp.max);
 
