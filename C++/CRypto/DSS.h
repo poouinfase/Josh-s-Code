@@ -6,6 +6,7 @@
 
 DS
 #include "Encrypt.h"
+#include <assert.h>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
@@ -64,6 +65,8 @@ public:
   std::string Message;
   DSS(uint64_t p, uint64_t q, uint64_t h, uint64_t x) {
     /* std::cout << int(powAh(16, 5)) << std::endl; */
+    assert(prime(p) && prime(q));
+    assert(((p - 1) % q) == 0);
     keyGen(p, q, h, x);
   }
   void keyGen(uint64_t p, uint64_t q, uint64_t h, uint64_t x) {

@@ -25,23 +25,28 @@ public:
       data[i] = 0;
   }
   ~WordArray() { free(data); }
+
   uint8_t get1Bit(__uint128_t ind) {
     assert(ind < len);
     uint8_t byte = data[ind / 8];
     return byte & (ind % 8);
   }
+
   uint8_t get1Byte(__uint128_t ind) { return data[ind]; }
+
   uint64_t get64Bits(__uint128_t ind) {
     assert(ind < len / 8);
     uint64_t *data64 = (uint64_t *)data;
     return __builtin_bswap64(data64[ind]);
   }
+
   uint64_t get32Bits(__uint128_t ind) {
     assert(ind < len / 4);
 
     uint32_t *data32 = (uint32_t *)data;
     return __builtin_bswap32(data32[ind]);
   }
+
   void set1Bits(__uint128_t ind, uint8_t ele) {
     assert(ind < bitlen && ele <= 1);
 
@@ -140,40 +145,40 @@ public:
     for (int c = 0; c < len / 128; c++) {
       for (int i = 0; i < 16; i++)
         TMP[i] = get64Bits(i + 16 * c);
-    }
 
-    uint64_t V[8];
-    memcpy(V, H, sizeof(uint64_t) * 8);
+      uint64_t V[8];
+      memcpy(V, H, sizeof(uint64_t) * 8);
 
-    for (int c = 16; c < 80; c++) {
-      uint64_t s0 =
-          ROTR(TMP[c - 15], 1) ^ ROTR(TMP[c - 15], 8) ^ (TMP[c - 15] >> 7);
+      for (int c = 16; c < 80; c++) {
+        uint64_t s0 =
+            ROTR(TMP[c - 15], 1) ^ ROTR(TMP[c - 15], 8) ^ (TMP[c - 15] >> 7);
 
-      uint64_t s1 =
-          ROTR(TMP[c - 2], 19) ^ ROTR(TMP[c - 2], 61) ^ (TMP[c - 2] >> 6);
+        uint64_t s1 =
+            ROTR(TMP[c - 2], 19) ^ ROTR(TMP[c - 2], 61) ^ (TMP[c - 2] >> 6);
 
-      TMP[c] = TMP[c - 16] + s0 + TMP[c - 7] + s1;
-    }
-    for (int c = 0; c < 80; c++) {
-      uint64_t S0 = ROTR(V[0], 28) ^ ROTR(V[0], 34) ^ ROTR(V[0], 39);
+        TMP[c] = TMP[c - 16] + s0 + TMP[c - 7] + s1;
+      }
+      for (int c = 0; c < 80; c++) {
+        uint64_t S0 = ROTR(V[0], 28) ^ ROTR(V[0], 34) ^ ROTR(V[0], 39);
 
-      uint64_t temp2 = S0 + MAJ(V[0], V[1], V[2]);
+        uint64_t temp2 = S0 + MAJ(V[0], V[1], V[2]);
 
-      uint64_t S1 = ROTR(V[4], 14) ^ ROTR(V[4], 18) ^ ROTR(V[4], 41);
+        uint64_t S1 = ROTR(V[4], 14) ^ ROTR(V[4], 18) ^ ROTR(V[4], 41);
 
-      uint64_t temp1 = V[7] + S1 + CH(V[4], V[5], V[6]) + K[c] + TMP[c];
+        uint64_t temp1 = V[7] + S1 + CH(V[4], V[5], V[6]) + K[c] + TMP[c];
 
-      V[7] = V[6];
-      V[6] = V[5];
-      V[5] = V[4];
-      V[4] = V[3] + temp1;
-      V[3] = V[2];
-      V[2] = V[1];
-      V[1] = V[0];
-      V[0] = temp1 + temp2;
-    }
-    for (int c = 0; c < 8; c++) {
-      H[c] += V[c];
+        V[7] = V[6];
+        V[6] = V[5];
+        V[5] = V[4];
+        V[4] = V[3] + temp1;
+        V[3] = V[2];
+        V[2] = V[1];
+        V[1] = V[0];
+        V[0] = temp1 + temp2;
+      }
+      for (int c = 0; c < 8; c++) {
+        H[c] += V[c];
+      }
     }
     std::stringstream strout;
     for (int c = 0; c < 8; c++) {
