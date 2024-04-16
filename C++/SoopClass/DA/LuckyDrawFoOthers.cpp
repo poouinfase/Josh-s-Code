@@ -78,9 +78,9 @@ int main() {
 
   p *= gues;
   p %= GUESSLIM;
-  /* std::cout << p << std::endl; */
+  std::cout << p << std::endl;
 
-  int dis = GUESSLIM - absol(p - gues);
+  int dis = GUESSLIM - absol(p - gues) - 1;
 
   printf("You win Rs %d\n", lis[dis]);
 
