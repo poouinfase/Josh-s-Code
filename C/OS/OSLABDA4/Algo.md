@@ -2,6 +2,8 @@
 
 FFCS:
 
+ALGORITHM:
+
 STEP 1: Start.
 STEP 2: Find the first valid element of the list of requests.
 STEP 3: Fulfill request and move read write head to specified location.
@@ -11,6 +13,8 @@ STEP 5: Stop.
 
 SSTF:
 
+ALGORITHM:
+
 STEP 1: Start.
 STEP 2: Find a valid element of the list of requests that has minimum difference between itself and the current location.
 STEP 3: Fulfill request and move read write head to specified location.
@@ -19,6 +23,8 @@ STEP 5: Stop.
 
 SCAN:
 
+ALGORITHM:
+
 STEP 1: Start
 STEP 2: Start moving read write head from current location to maximum location
 STEP 3: Fulfill all requests that occur as head moves.
@@ -26,6 +32,8 @@ STEP 4: If maximum location is reached got to location 0 else repeat STEP 3.
 STEP 5: Stop
 
 CSCAN:
+
+ALGORITHM:
 
 STEP 1: Start
 STEP 2: Set target to maximum address of disk.
@@ -37,6 +45,8 @@ STEP 7: If request list is empty go to step 8 else go to step 3
 STEP 8: Stop
 
 CLOOK:
+
+ALGORITHM:
 
 STEP 1: Start
 STEP 2: Find the maximum request in the request list and set target to that
