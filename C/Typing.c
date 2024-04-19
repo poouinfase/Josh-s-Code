@@ -1,11 +1,10 @@
 #include <conio.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
-#define SIZE_OF_TYPING 26
-
-char randselect(char *s, int len) { return s[rand() % len]; }
+char randselect(char *s) { return s[rand() % strlen(s)]; }
 
 void moveleft() {
   putc('\e', stdout);
@@ -14,16 +13,19 @@ void moveleft() {
 }
 
 int main(int argc, char *argv[]) {
-  char i;
+
   srand(time(NULL));
+  char i;
   char *s = "ABCDEFGHIJLKMNOPQRSTUVWXYZ";
+
   do {
-    char tmp = randselect(s, SIZE_OF_TYPING);
-    putc(tmp, stdout);
+    char tmp = randselect(s);
+    putchar(tmp);
     i = _getch();
+
     if ((i - 32) == (tmp))
       moveleft();
     else
-      puts("");
+      putchar('\n');
   } while (i && i != 3);
 }
