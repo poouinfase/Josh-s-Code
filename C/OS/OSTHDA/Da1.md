@@ -46,4 +46,8 @@ A file's blocks are written randomly into memory and the pointer to all the bloc
 
 ---
 
-[Q2]()
+[Q2](https://www.geeksforgeeks.org/architecture-of-linux-operating-system/)
+
+---
+
+[Q3]()
