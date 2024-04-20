@@ -50,4 +50,19 @@ A file's blocks are written randomly into memory and the pointer to all the bloc
 
 ---
 
-[Q3]()
+[Q3](file:///C:/Users/catte/Downloads/OperatingSystemConcepts-10th[1].pdf)
+
+The idea of virtualisation is to abstract away most of the hardware specifics of a machine, allowing for a single computer's resources are divided into several independent execution environments.
+
+The main functions of a virtual machine are as follows:
+
+-> It allows for more efficient use of hardware as it can be used to share resources between multiple environments. This is called system consolidation. This means that multiple light loads can be combined and served by one heavy machine, which can adaptively provision resources as needed.
+
+-> It helps increase security as the hosts are unaffected by the actions of the guest environments, and the virtual machines are unaffected by each other. Thus if a security breach occurs in a VM, the host and other VMs are unaffected as they are all effectively isolated from one another. Making it a protected and safe environment.
+
+-> One useful feature of a VM is the ability to suspend a running machine and in some cases even save snapshots or copies of the virtual machine that can be resumed at anytime. Helping prevent data loss due to malfunction by using rollbacks.
+
+-> VMs are also a useful developer tool as testing and iteration can be done on the machines without interrupting the normal workflow.
+
+-> The versatility of VMs can be seen in another case, where workloads can be moved from one physical system to another with minimal interruption allowing for high availability and fault tolerance. This feature is called live migration.
+
