@@ -62,4 +62,19 @@ Often times we use reference variables in order to access objects, arrays and ot
 
 Reference variables are what we use to access heap memory, allowing us to use more dynamic programming paradigms and allow us to store and return multiple values.
 
+```c
+#include <stdio.h>
+void changeAddr(int *ref) { (*ref)++; }
+void change(int val) { val++; }
+
+int main(int argc, char *argv[]) {
+  int n = 90;
+  printf("%d\n", n);
+  change(n); // Change not carried into main
+  printf("%d\n", n);
+  changeAddr(&n); // Change is done to n
+  printf("%d\n", n);
+  return 0;
+}
+```
 ---
