@@ -1,5 +1,6 @@
-
 Both structures and classes containerize data allowing one entity to contain multiple variables.
+Both have member variables
+
 
 Structures can be held in stack memory or heap memory.
 Classes are mainly held in heap memory.
@@ -57,7 +58,7 @@ int main() {
 ---
 
 Reference variables are variables that contain the address of another variable.
-Thus we can access a variable by dereferencing a reference variable.
+Thus we can access a variable by dereferencing a reference variable, thus directly accessing the relevant memory address.
 Often times we use reference variables in order to access objects, arrays and other classes.
 
 Reference variables are what we use to access heap memory, allowing us to use more dynamic programming paradigms and allow us to store and return multiple values.

@@ -48,6 +48,19 @@ A file's blocks are written randomly into memory and the pointer to all the bloc
 
 [Q2](https://www.geeksforgeeks.org/architecture-of-linux-operating-system/)
 
+Linux follows a ringed-tier system. At the center of it is hardware and around it are layers of abstraction allowing for simplified interfaces for user level programs.
+
+The outermost layer is called the shell. This is the part that the user interacts with.
+-> CLI 
+-> GUI
+
+The operating system will supply system libraries, which are predefined functions by using which any application program or system utilities.
+
+Main Subsystems of kernel:
+Process scheduler: Responsible for fairly distributing the processing time among all the concurrently running process.
+Memory management unit: This kernel sub unit is responsible for proper distribution of memory resources among the concurrently running process.
+Virtual file system: This subsystem provides interface to access stored data across different file system and different physical media.
+
 ---
 
 [Q3](file:///C:/Users/catte/Downloads/OperatingSystemConcepts-10th[1].pdf)
@@ -66,3 +79,19 @@ The main functions of a virtual machine are as follows:
 
 -> The versatility of VMs can be seen in another case, where workloads can be moved from one physical system to another with minimal interruption allowing for high availability and fault tolerance. This feature is called live migration.
 
+---
+[Q4](https://drago1234.github.io/assets/images/2020-06-09-gpg-utility/symmetric_encryption.png)
+
+The main protection of data against adverse parties is known as cryptography. The mathematical transformation of data in a reversible manner.
+
+This transformation requires access to certain keys, any person with the encrypted data will not be able to gain access to the private data without the key.
+
+There are multiple forms of cryptography, the most prevalent sub-categories of which are asymmetric and symmetric encryption.
+
+In asymmetric encryption the cryptographic algorithm has two keys. The public key and private key. The two keys are different, one is used during the creation of cypher text and the other is used during decryption.
+Normally the two keys are called the private key and public key, one is free for all people to use and the other must only be held by trusted parties. Depending on the requirements either encryption or decryption keys can be private or public.
+
+Symmetric encryption requires only one key. This allows any user to reverse the encryption provided they have the cypher text.
+Symmetric encryption is used mainly when high volumes of data must be transferred securely, as it is much faster.
+
+In order to transfer the symmetric keys one must use asymmetric public keys to encrypt them and then send them via the network, as required.
