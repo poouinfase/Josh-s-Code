@@ -80,13 +80,13 @@ public:
   }
 };
 
-class Test {
+class Student {
 private:
   char name[50];
   int Uid;
 
 public:
-  Test(int i = 0) {
+  Student(int i = 0) {
     name[0] = 0;
     Uid = i;
   }
@@ -122,14 +122,14 @@ int main() {
   cout << "How Many Objects?: ";
   cin >> Obji;
   for (int i = 0; i < Obji; i++) {
-    Test *ti = new Test(i + 1);
+    Student *ti = new Student(i + 1);
     ti->input();
     a.push(ti);
   }
 
   // POPIN
   for (int i = 0; i < Obji; i++) {
-    Test *ti;
+    Student *ti;
     a.pop(&ti);
     ti->out();
   }

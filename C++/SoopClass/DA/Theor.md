@@ -68,7 +68,7 @@ Reference variables are what we use to access heap memory, allowing us to use mo
 void changeAddr(int *ref) { (*ref)++; }
 void change(int val) { val++; }
 
-int main(int argc, char *argv[]) {
+int main() {
   int n = 90;
   printf("%d\n", n);
   change(n); // Change not carried into main

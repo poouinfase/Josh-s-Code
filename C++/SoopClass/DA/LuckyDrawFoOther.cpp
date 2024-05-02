@@ -1,11 +1,9 @@
-#include <cstddef>
-#include <cstdio>
 #include <iostream>
-#include <locale.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
+using namespace std;
 
 int max(int a, int b) {
   if (a > b)
@@ -23,7 +21,7 @@ int absol(int X) {
 int main() {
   srand(time(NULL));
 
-  uint32_t p = rand() % 10;
+  unsigned int p = rand() % 10;
   std::vector<int> lis;
 
   int num = 1;
@@ -35,16 +33,15 @@ int main() {
   }
 
   int gues = 0;
-  printf("GUESS [1-10]\n");
   std::cin >> gues;
   gues--;
 
   p *= gues;
   p %= 10;
 
-  int dis = 10 - absol(p - gues) - 1;
+  int dis = 9 - absol(p - gues);
 
-  printf("You win Rs %d\n", lis[dis]);
+  cout << "You win Rs " << lis[dis] << endl;
 
   return 0;
 }

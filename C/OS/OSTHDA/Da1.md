@@ -29,7 +29,7 @@ Flexibility is increased as file sharing and editing access is there for multipl
 Disadvantages of Acyclic:
 Because of the complex structure it has, it is difficult to implement this directory structure.
 The user must be very cautious to edit or even deletion of file as the file is accessed by multiple users.
-If we need to delete the file, then we need to delete all the references of the file inorder to delete it permanently.
+If we need to delete the file, then we need to delete all the references of the file in order to delete it permanently.
 
 [FILE ALLOCATION](https://www.geeksforgeeks.org/file-allocation-methods/):
 
