@@ -30,21 +30,30 @@ public:
   void VecExp(int Se = 0) {
     len *= 1.5;
     len = max(Se, len);
-    lis = (T *)realloc(lis, len);
+    this->lis = (T *)realloc(lis, len * sizeof(T));
     for (int i = at + 1; i < len; i++)
       lis[i] = 0;
   }
 
-  void push_back(T a) {
+  void push(T a) {
     at++;
+    if (at >= len)
+      VecExp(at + 1);
     lis[at] = a;
   }
 
-  T pop_back() { return lis[at--]; }
+  void prin() {
+    for (int i = 0; i <= at; ++i) {
+      std::cout << lis[i] << " ";
+    }
+    std::cout << std::endl;
+  }
+
+  T pop() { return lis[at--]; }
 
   T &operator[](const size_t ind) {
     if (ind >= len)
-      VecExp(ind);
+      VecExp(ind + 1);
     return lis[ind];
   }
   ~Vec() { free(lis); }
@@ -60,13 +69,13 @@ int absol(int X) {
 int main() {
   srand(time(NULL));
 
-  uint32_t p = rand() % GUESSLIM;
-  Vec<int> lis;
+  uint32_t p = rand();
+  Vec<int> lis(2);
 
   int num = 1;
 
   for (int i = 0; i < GUESSLIM; i += 1) {
-    lis.push_back(num);
+    lis.push(num);
     num *= 10;
     num += rand() % 10;
   }
@@ -75,10 +84,11 @@ int main() {
   printf("GUESS [1-%d] ", GUESSLIM);
   std::cin >> gues;
   gues--;
+  /* lis.prin(); */
 
   p *= gues;
   p %= GUESSLIM;
-  std::cout << p << std::endl;
+  /* std::cout << p << std::endl; */
 
   int dis = GUESSLIM - absol(p - gues) - 1;
 
