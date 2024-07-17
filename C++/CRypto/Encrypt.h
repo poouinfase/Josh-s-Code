@@ -182,7 +182,7 @@ public:
     }
     std::stringstream strout;
     for (int c = 0; c < 8; c++) {
-      strout << std::setfill('0') << std::setw(16) << std::hex << (H[c] | 0);
+      strout << std::setfill('0') << std::setw(16) << std::hex << (H[c]);
     }
     return strout.str();
   }
