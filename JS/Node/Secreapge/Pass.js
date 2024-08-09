@@ -67,3 +67,9 @@ function save() {
 
 incrButn.addEventListener('click',()=>{increment()})
 savBtn.addEventListener('click',()=>{save()})
+//
+//
+// const express=require('express')
+// const app=express()
+// app.post("/Creds",(req,res)=>{ res.send("Some info");
+// })
