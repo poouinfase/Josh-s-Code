@@ -7,3 +7,4 @@ a.out
 *.class
 *.ign.*
 !Timings.txt
+node_modules
