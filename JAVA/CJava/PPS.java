@@ -47,14 +47,23 @@ class PPS {
 
   public static void Q3() {
     Scanner sc = new Scanner(System.in);
-    int mark = sc.nextInt();
+    int day = sc.nextInt();
+    String days[] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", };
+    System.out.println(days[day % days.length]);
+    sc.close();
+  }
+
+  public static void Q4() {
+    Scanner sc = new Scanner(System.in);
+    float basicPay = sc.nextFloat();
+    float salary = basicPay * 1.98f;
+    System.out.printf("Salary is Rs %.2f", salary);
     sc.close();
   }
 
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     int ch = sc.nextInt();
-    sc.close();
     switch (ch) {
       case 1:
         Q1();
@@ -64,10 +73,19 @@ class PPS {
         Q2();
         break;
 
+      case 3:
+        Q3();
+        break;
+
+      case 4:
+        Q4();
+        break;
+
       default:
         System.out.println("Not a valid choice");
         break;
     }
+    sc.close();
   }
 
 }
