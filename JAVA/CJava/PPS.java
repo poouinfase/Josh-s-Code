@@ -61,6 +61,17 @@ class PPS {
     sc.close();
   }
 
+  public static void Q5() {
+    int avg1 = 39;
+    int n1 = 14;
+    int avg2 = 31;
+    int n2 = 12;
+    int total = avg1 * n1 + avg2 * n2;
+    float average = (float) total / (float) (n1 + n2);
+
+    System.out.printf("Average is %f", average);
+  }
+
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     int ch = sc.nextInt();
@@ -79,6 +90,10 @@ class PPS {
 
       case 4:
         Q4();
+        break;
+
+      case 5:
+        Q5();
         break;
 
       default:
