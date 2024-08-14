@@ -15,6 +15,7 @@ class PPS {
     sc.close();
   }
 
+  // test
   public static void Q2() {
     Scanner sc = new Scanner(System.in);
     int mark = sc.nextInt();
