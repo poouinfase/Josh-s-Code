@@ -247,9 +247,71 @@ class PPS {
     sc.close();
   }
 
+  public static Student Q12Max(Student[] arr) {
+    int max = 0;
+    for (int i = 1; i < arr.length; i++) {
+      if (arr[i].average > arr[max].average)
+        max = i;
+    }
+    return arr[max];
+  }
+
+  public static void Q12() {
+    Student arr[] = new Student[5];
+    for (int i = 0; i < 5; i++) {
+      arr[i] = new Student();
+      arr[i].input();
+    }
+
+    Student max = Q12Max(arr);
+    System.out.printf("Highest: %.2f by Roll: %s\n", max.average, max.regNo);
+
+    for (int i = 0; i < 5; i++) {
+      if (!arr[i].hasFailed())
+        continue;
+      System.out.printf("Roll: %s Failed\n", arr[i].regNo);
+    }
+  }
+
+  public static void Q13() {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter dimensions of matrix");
+    int n = sc.nextInt();
+    int m = sc.nextInt();
+    int matrix[][] = new int[n][m];
+
+    System.out.println("Enter elements of matrix");
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[i].length; j++) {
+        matrix[i][j] = sc.nextInt();
+      }
+    }
+
+    System.out.println("Enter target of matrix");
+    int target = sc.nextInt();
+    sc.close();
+    System.out.println("Element found at: " + findElement(matrix, target));
+
+  }
+
+  public static Coordinate findElement(int[][] matrix, int target) {
+    Coordinate out = new Coordinate();
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[i].length; j++) {
+        if (matrix[i][j] == target) {
+          out.x = i;
+          out.y = j;
+          return out;
+        }
+      }
+    }
+    return out;
+  }
+
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     int ch = sc.nextInt();
+    System.out.println("Enter choice [1-13]");
     switch (ch) {
       case 1:
         Q1();
@@ -295,6 +357,14 @@ class PPS {
         Q11();
         break;
 
+      case 12:
+        Q12();
+        break;
+
+      case 13:
+        Q13();
+        break;
+
       default:
         System.out.println("Not a valid choice");
         break;
@@ -302,4 +372,43 @@ class PPS {
     sc.close();
   }
 
+}
+
+class Student {
+  private int n1;
+  private int n2;
+  private int n3;
+  private int n4;
+  private int n5;
+
+  public float average;
+  public String regNo;
+
+  public void input() {
+    Scanner sc = new Scanner(System.in);
+    System.out.print("Registration No: ");
+    this.regNo = sc.next();
+
+    System.out.println("Enter marks for five subjects");
+    this.n1 = sc.nextInt();
+    this.n2 = sc.nextInt();
+    this.n3 = sc.nextInt();
+    this.n4 = sc.nextInt();
+    this.n5 = sc.nextInt();
+
+    this.average = (this.n1 + this.n2 + this.n3 + this.n4 + this.n5) / 5f;
+  }
+
+  public boolean hasFailed() {
+    return this.average < 40;
+  }
+}
+
+class Coordinate {
+  public int x = -1;
+  public int y = -1;
+
+  public String toString() {
+    return "(" + x + ", " + y + ")";
+  }
 }
