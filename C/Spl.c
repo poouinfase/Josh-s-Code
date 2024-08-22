@@ -54,6 +54,13 @@ CstrView split_handle(split_args In) {
   return split_worker(In.strin, In.sep);
 }
 
+void freeCstrView(CstrView* in){
+  for(int i = 0; i < in->len; i++){
+    free(in->StrArray[i]);
+  }
+  free(in->StrArray);
+}
+
 int main() {
   char *strin = (char *)malloc(sizeof(char) * 50);
   if (scanf("%[^\n]*s", strin) == 0)
@@ -62,7 +69,6 @@ int main() {
   free(strin);
   for (int i = 0; i < out.len; i++) {
     printf("%s\n", out.StrArray[i]);
-    free(out.StrArray[i]);
   }
-  free(out.StrArray);
+  freeCstrView(&out);
 }
